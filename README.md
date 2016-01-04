@@ -1,6 +1,6 @@
-# Proposal
+# Proposal Run app
 
-Deze app is bedoeld om een leuke ren route te bepalen en je afstand bij te houden tijdens het rennen.
+Hasine Efetürk, 10173536 <hasineefeturk@hotmail.com> Deze app is bedoeld om een leuke ren route te bepalen en je afstand bij te houden tijdens het rennen.
 
 Mijn app zal een startscherm bevatten met twee buttons, Search Run en Start Run. 
 Als er op de eerste wordt gedrukt, kom je terecht in een andere scherm die de map van waar de gebruiker zich bevindt toont.
