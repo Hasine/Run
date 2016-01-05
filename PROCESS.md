@@ -1,3 +1,4 @@
-# day 1
-Writing proposal
-# day 2
+# dag 1
+Proposal schrijven
+# dag 2
+Alle activities aangemaakt en startscherm af
