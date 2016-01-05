@@ -1,4 +1,10 @@
 <resources>
-    <string name="app_name">Run</string>
-    <string name="action_settings">Settings</string>
+    <string name="app_name">Love To Run</string>
+    <string name="action_settings">Music Settings</string>
+    <string name="start">START RUN</string>
+    <string name="search">SEARCH RUN</string>
+    <string name="title_activity_search">Search Run</string>
+    <string name="title_activity_start">Start Run</string>
+    <string name="gotomain">back to main</string>
+    <string name="showroute">show route</string>
 </resources>
