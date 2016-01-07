@@ -3,8 +3,8 @@
     <string name="action_settings">Music Settings</string>
     <string name="start">START RUN</string>
     <string name="search">SEARCH RUN</string>
-    <string name="title_activity_search">Search Run</string>
     <string name="title_activity_start">Start Run</string>
     <string name="gotomain">back to main</string>
     <string name="showroute">show route</string>
+    <string name="title_activity_search">Map</string>
 </resources>
