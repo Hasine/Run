@@ -1,4 +1,4 @@
-# Proposal LoveToRun app
+# LoveToRun app
 
 Hasine Efetürk, 10173536 <hasineefeturk@hotmail.com> Deze app is bedoeld om een leuke ren route te bepalen en je afstand bij te houden tijdens het rennen.
 
