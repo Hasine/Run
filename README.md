@@ -17,6 +17,8 @@ Mogelijke problemen die ik kan oplopen tijdens het maken van de app is om een go
 
 Een vergelijkbare app is de nike+ Running app. Met deze app is het ook mogelijk om je ren route te tracken alleen is de muziekspelen ervan niet handig en kan deze app geen route voor je bedenken.
 
+## Schetsen
+
  <img src="https://github.com/Hasine/Run/blob/master/doc/main.png" height="600px" width="400px" />
  <img src="https://github.com/Hasine/Run/blob/master/doc/main1.png" height="600px" width="400px" /> 
  <img src="https://github.com/Hasine/Run/blob/master/doc/musicsettings.png" height="600px" width="400px" />
