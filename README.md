@@ -16,3 +16,9 @@ Ik zal gebruik moeten maken van de Google Maps API, verder moet ik ook nog leren
 Mogelijke problemen die ik kan oplopen tijdens het maken van de app is om een goede route te bepalen aan de hand van de gekozen afstand. 
 
 Een vergelijkbare app is de nike+ Running app. Met deze app is het ook mogelijk om je ren route te tracken alleen is de muziekspelen ervan niet handig en kan deze app geen route voor je bedenken.
+
+![alt tag](https://github.com/Hasine/Run/blob/master/doc/main.png)
+![alt tag](https://github.com/Hasine/Run/blob/master/doc/main1.png)
+![alt tag](https://github.com/Hasine/Run/blob/master/doc/musicsettings.png)
+![alt tag](https://github.com/Hasine/Run/blob/master/doc/search.png)
+![alt tag](https://github.com/Hasine/Run/blob/master/doc/start.png)
