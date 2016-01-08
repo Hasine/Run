@@ -21,4 +21,4 @@ Een vergelijkbare app is de nike+ Running app. Met deze app is het ook mogelijk 
 ![alt tag](https://github.com/Hasine/Run/blob/master/doc/main1.png)
 ![alt tag](https://github.com/Hasine/Run/blob/master/doc/musicsettings.png)
 ![alt tag](https://github.com/Hasine/Run/blob/master/doc/search.png)
-![alt tag](https://github.com/Hasine/Run/blob/master/doc/start.png)
+![alt tag](https://github.com/Hasine/Run/blob/master/doc/startrun.png)
