@@ -18,15 +18,6 @@ public class RunMainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_run_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
     }
 
 
@@ -56,14 +47,8 @@ public class RunMainActivity extends AppCompatActivity {
 
         switch (id) {
             case R.id.action_settings:
-
-            case R.id.gotoMain:
-                Intent gotoMain = new Intent(this, RunMainActivity.class);
-                startActivity(gotoMain);
-                return true;
-
-            case R.id.showroute:
-
+                Intent gotosettings = new Intent(this, MusicSettings.class);
+                startActivity(gotosettings);
             default:
                 return super.onOptionsItemSelected(item);
         }

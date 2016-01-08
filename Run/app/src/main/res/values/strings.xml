@@ -4,7 +4,7 @@
     <string name="start">START RUN</string>
     <string name="search">SEARCH RUN</string>
     <string name="title_activity_start">Start Run</string>
-    <string name="gotomain">back to main</string>
-    <string name="showroute">show route</string>
     <string name="title_activity_search">Map</string>
+    <string name="title_activity_saved_route">Map</string>
+    <string name="title_activity_music_settings">MusicSettings</string>
 </resources>
