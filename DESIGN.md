@@ -13,8 +13,8 @@
 
 ## Classes and public methods
 Class RunMainActivity
-*~ public void search
-*~ public void start
+* ~ public void search
+* ~ public void start
 
 Class SavedRouteActivity
 Nog niks
@@ -26,11 +26,11 @@ Class SearchActivity
 * private LatLng myLocation
 * private PolylineOptions rectOptions
 * private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000
-*~ public void onConnected
-*~ private void handleNewLocation
-*~ public void onMapReady
-*~ public void onMapLongClick
-*~ public void onMarkerDragEnd
+* ~ public void onConnected
+* ~ private void handleNewLocation
+* ~ public void onMapReady
+* ~ public void onMapLongClick
+* ~ public void onMarkerDragEnd
 
 Class StartActivity
 * private float goal
