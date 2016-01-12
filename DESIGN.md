@@ -40,6 +40,7 @@ Class StartActivity
 Zie README voor meest actuele UI screenshots
 ## APIs and Frameworks
 * Google Maps Android API
+* Android Media API
 
 ## Data source, database tables and fields
 Geen
