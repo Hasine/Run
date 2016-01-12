@@ -3,6 +3,7 @@ package hasine.project.mprog.run;
 // inspired by http://blog.teamtreehouse.com/beginners-guide-location-android
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -33,7 +34,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-public class Search extends FragmentActivity implements
+public class SearchActivity extends FragmentActivity implements
         OnMapReadyCallback,
         GoogleMap.OnMarkerDragListener,
         GoogleMap.OnMapLongClickListener,
@@ -47,7 +48,7 @@ public class Search extends FragmentActivity implements
     private LatLng myLocation;
     private PolylineOptions rectOptions;
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
-    public static final String TAG = Search.class.getSimpleName();
+    public static final String TAG = SearchActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +119,8 @@ public class Search extends FragmentActivity implements
         Log.d(TAG, location.toString());
         myLocation = new LatLng(location.getLatitude(), location.getLongitude());
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 14));
+        Intent sendlocation = new Intent(this, SavedRouteActivity.class);
+        sendlocation.putExtra("currentlocation", myLocation);
     }
 
     @Override

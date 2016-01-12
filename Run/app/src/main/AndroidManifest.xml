@@ -3,14 +3,10 @@
     package="hasine.project.mprog.run">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-    <!--
-         The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
-         Google Maps Android API v2, but you must specify either coarse or fine
-         location permissions for the 'MyLocation' functionality. 
-    -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
 
     <application
         android:allowBackup="true"
@@ -29,7 +25,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Start"
+            android:name=".StartActivity"
             android:label="@string/title_activity_start"
             android:theme="@style/AppTheme.NoActionBar" />
 
@@ -52,15 +48,11 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".Search"
+            android:name=".SearchActivity"
             android:label="@string/title_activity_search" />
         <activity
-            android:name=".SavedRoute"
+            android:name=".SavedRouteActivity"
             android:label="@string/title_activity_saved_route" />
-        <activity
-            android:name=".MusicSettings"
-            android:label="@string/title_activity_music_settings"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

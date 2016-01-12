@@ -11,5 +11,10 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="hasine.project.mprog.run.Start"
     tools:showIn="@layout/activity_start">
+    <activity
+        android:name="com.example.musicplayer.MainActivity"
+        android:label="@string/app_name"
+        android:launchMode="singleTop"
+        android:screenOrientation="portrait"/>
 
 </RelativeLayout>

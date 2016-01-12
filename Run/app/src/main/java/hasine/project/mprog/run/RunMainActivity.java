@@ -22,12 +22,12 @@ public class RunMainActivity extends AppCompatActivity {
 
 
     public void search(View view) {
-        Intent gotoSearch = new Intent(this, Search.class);
+        Intent gotoSearch = new Intent(this, SearchActivity.class);
         startActivity(gotoSearch);
     }
 
     public void start(View view) {
-        Intent gotoStart = new Intent(this, Start.class);
+        Intent gotoStart = new Intent(this, StartActivity.class);
         startActivity(gotoStart);
     }
 
@@ -47,7 +47,7 @@ public class RunMainActivity extends AppCompatActivity {
 
         switch (id) {
             case R.id.action_settings:
-                Intent gotosettings = new Intent(this, MusicSettings.class);
+                Intent gotosettings = new Intent(this, SavedRouteActivity.class);
                 startActivity(gotosettings);
             default:
                 return super.onOptionsItemSelected(item);
