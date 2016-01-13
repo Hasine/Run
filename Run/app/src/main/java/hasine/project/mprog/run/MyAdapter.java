@@ -5,26 +5,18 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.view.LayoutInflater;
-import android.view.View;
+import android.util.Log;
 
-
-public class PagerAdapter extends FragmentPagerAdapter {
+public class MyAdapter extends FragmentPagerAdapter {
     final int PAGE_COUNT = 3;
     private String tabTitles[] = new String[] {"Start Run", "Saved Route", "Runned Routes" };
     private Context context;
+    public static final String TAG = MyAdapter.class.getSimpleName();
 
-    public View getTabView(int position) {
-        // Given you have a custom layout in `res/layout/custom_tab.xml` with a TextView and ImageView
-        View v = LayoutInflater.from(context).inflate(R.layout.activity_saved_route, null);
-        return v;
-    }
-
-    public PagerAdapter(FragmentManager fm, StartActivity context) {
+    public MyAdapter(FragmentManager fm, StartActivity context) {
         super(fm);
         this.context = context;
     }
-
 
     @Override
     public int getCount() {
@@ -33,6 +25,14 @@ public class PagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
+        switch (position){
+            case (1):
+                return PageFragment.newInstance(position + 1);
+            case (2):
+                return PageFragment.newInstance(position + 1);
+            case (3):
+//                return SavedRouteActivity;
+        }
         return PageFragment.newInstance(position + 1);
     }
 

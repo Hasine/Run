@@ -1,6 +1,7 @@
 package hasine.project.mprog.run;
 
 import android.content.Intent;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,6 +33,7 @@ public class SavedRouteActivity extends FragmentActivity implements OnMapReadyCa
                         .findFragmentById(R.id.streetviewpanorama);
         streetViewPanoramaFragment.getStreetViewPanoramaAsync(this);
     }
+
 
 
     /**

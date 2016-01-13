@@ -27,19 +27,13 @@ public class StartActivity extends AppCompatActivity implements MediaPlayerContr
 
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        PagerAdapter pagerAdapter =
-                new PagerAdapter(getSupportFragmentManager(), StartActivity.this);
+        MyAdapter pagerAdapter =
+                new MyAdapter(getSupportFragmentManager(), StartActivity.this);
         viewPager.setAdapter(pagerAdapter);
 
         // Give the TabLayout the ViewPager
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
-
-        // Iterate over all tabs and set the custom view
-        for (int i = 0; i < tabLayout.getTabCount(); i++) {
-            TabLayout.Tab tab = tabLayout.getTabAt(i);
-            tab.setCustomView(pagerAdapter.getTabView(i));
-        }
 
     }
 
@@ -54,6 +48,10 @@ public class StartActivity extends AppCompatActivity implements MediaPlayerContr
         super.onRestoreInstanceState(savedInstanceState);
         viewPager.setCurrentItem(savedInstanceState.getInt(POSITION));
     }
+
+    /**
+     * Menu settings
+     */
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -77,6 +75,13 @@ public class StartActivity extends AppCompatActivity implements MediaPlayerContr
                 return super.onOptionsItemSelected(item);
         }
     }
+
+
+
+
+    /**
+     * Music player settings
+     */
 
     @Override
     public void start() {
