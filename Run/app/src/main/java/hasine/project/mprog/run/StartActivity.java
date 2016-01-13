@@ -14,6 +14,9 @@ import android.widget.MediaController.MediaPlayerControl;
 public class StartActivity extends AppCompatActivity implements MediaPlayerControl {
 
     private MusicController controller;
+    TabLayout tabLayout;
+    ViewPager viewPager;
+    public static String POSITION = "POSITION";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,19 +27,32 @@ public class StartActivity extends AppCompatActivity implements MediaPlayerContr
 
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        viewPager.setAdapter(new PagerAdapter(getSupportFragmentManager(),
-                StartActivity.this));
+        PagerAdapter pagerAdapter =
+                new PagerAdapter(getSupportFragmentManager(), StartActivity.this);
+        viewPager.setAdapter(pagerAdapter);
 
         // Give the TabLayout the ViewPager
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
 
-//        // Iterate over all tabs and set the custom view
-//        for (int i = 0; i < tabLayout.getTabCount(); i++) {
-//            TabLayout.Tab tab = tabLayout.getTabAt(i);
-//            tab.setCustomView(PagerAdapter.getTabView(i));
-//        }
+        // Iterate over all tabs and set the custom view
+        for (int i = 0; i < tabLayout.getTabCount(); i++) {
+            TabLayout.Tab tab = tabLayout.getTabAt(i);
+            tab.setCustomView(pagerAdapter.getTabView(i));
+        }
 
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(POSITION, tabLayout.getSelectedTabPosition());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        viewPager.setCurrentItem(savedInstanceState.getInt(POSITION));
     }
 
     @Override
