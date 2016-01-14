@@ -1,28 +1,25 @@
 package hasine.project.mprog.run;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.support.v4.app.Fragment;
 
-public class SavedRoute extends Fragment {
-
+// In this case, the fragment displays simple text based on the page
+public class StartFragment extends Fragment {
     public static final String ARG_PAGE = "ARG_PAGE";
+    public static final String TAG = StartFragment.class.getSimpleName();
     private int mPage;
-//    private OnFragmentInteractionListener mListener;
+    private View view;
 
-    public SavedRoute() {
-        // Required empty public constructor
-    }
-
-    public static SavedRoute newInstance(int page) {
+    public static StartFragment newInstance(int page) {
         Bundle args = new Bundle();
         args.putInt(ARG_PAGE, page);
-        SavedRoute fragment = new SavedRoute();
+        StartFragment fragment = new StartFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -36,7 +33,10 @@ public class SavedRoute extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_start, container, false);
+            view = inflater.inflate(R.layout.fragment_page, container, false);
+            TextView textView = (TextView) view;
+            textView.setText("Fragment #" + mPage);
+            Log.i(TAG, "Now in case 1");
+            return view;
     }
-
 }

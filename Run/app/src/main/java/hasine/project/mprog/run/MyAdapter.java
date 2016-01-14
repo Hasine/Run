@@ -25,15 +25,16 @@ public class MyAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        switch (position){
+        switch (position) {
             case (1):
-                return PageFragment.newInstance(position + 1);
+                return StartFragment.newInstance(position + 1);
             case (2):
-                return PageFragment.newInstance(position + 1);
+                return StartFragment.newInstance(position + 1);
             case (3):
-//                return SavedRouteActivity;
+                return StartFragment.newInstance(position + 1);
+            default:
+                return new Fragment();
         }
-        return PageFragment.newInstance(position + 1);
     }
 
     @Override

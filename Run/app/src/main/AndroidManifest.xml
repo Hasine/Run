@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -24,9 +24,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".StartActivity"
             android:label="@string/title_activity_start"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <meta-data
@@ -50,9 +53,9 @@
         <activity
             android:name=".SearchActivity"
             android:label="@string/title_activity_search" />
-        <activity
-            android:name=".SavedRouteActivity"
-            android:label="@string/title_activity_saved_route" />
     </application>
+
+    <service android:name="hasine.project.mprog.run.MusicService" />
+
 
 </manifest>

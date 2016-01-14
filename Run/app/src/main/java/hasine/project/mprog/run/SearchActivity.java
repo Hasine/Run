@@ -5,9 +5,11 @@ package hasine.project.mprog.run;
 import android.Manifest;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -47,6 +49,8 @@ public class SearchActivity extends FragmentActivity implements
     private LocationRequest mLocationRequest;
     private LatLng myLocation;
     private PolylineOptions rectOptions;
+    private double lat_loc, long_loc;
+    private SharedPreferences SP;
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     public static final String TAG = SearchActivity.class.getSimpleName();
 
@@ -70,6 +74,8 @@ public class SearchActivity extends FragmentActivity implements
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(10 * 1000)        // 10 seconds, in milliseconds
                 .setFastestInterval(1 * 1000); // 1 second, in milliseconds
+
+        SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
     }
 
     @Override
@@ -87,6 +93,14 @@ public class SearchActivity extends FragmentActivity implements
     @Override
     protected void onPause() {
         super.onPause();
+        Log.d(TAG, "location.lat in onPause: " + lat_loc);
+        Log.d(TAG, "location.long in onPause: " + long_loc);
+        SharedPreferences.Editor SPEditor = SP.edit();
+        SPEditor.putFloat("lat_loc", (float) lat_loc);
+        SPEditor.putFloat("long_loc", (float) long_loc);
+        SPEditor.commit();
+
+
         if (client.isConnected()) {
             LocationServices.FusedLocationApi.removeLocationUpdates(client, this);
             client.disconnect();
@@ -119,8 +133,9 @@ public class SearchActivity extends FragmentActivity implements
         Log.d(TAG, location.toString());
         myLocation = new LatLng(location.getLatitude(), location.getLongitude());
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 14));
-        Intent sendlocation = new Intent(this, SavedRouteActivity.class);
-        sendlocation.putExtra("currentlocation", myLocation);
+
+        lat_loc = location.getLatitude();
+        long_loc = location.getLongitude();
     }
 
     @Override
@@ -153,15 +168,7 @@ public class SearchActivity extends FragmentActivity implements
         Log.i(TAG, "Location services suspended. Please reconnect.");
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Amsterdam, The Netherlands.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
