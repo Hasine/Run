@@ -13,4 +13,10 @@ Presentatie voorbereiden
 ## dag 6
 Streetview saved route geïmplementeerd en uitgezocht hoe mediaplayer in android werkt
 ## dag 7
-Slideviews in start run, 
+Slideviews in start run, muziekspeler deels geïmplementeerd
+## dag 8
+Ingelezen over Fragments, fragments toegevoegd aan startscherm, 
+streetview geprobeerd toe te voegen aan startscherm maar had eerder fragmentactivity aangemaakt voor streetview,
+waardoor het niet mogelijk was om het als fragment te implementeren in startactivity. Heb geprobeerd om van streetview in fragmentactivity een fragment te maken.
+## dag 9
+fragmentactivity is weg maar heb een fragment wat gerund wordt via een adapter en een fragment in mijn activity die de streetview toont, nog niet helemaal af gekregen maar heb wel lang eraan gesleuteld.

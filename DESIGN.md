@@ -41,6 +41,7 @@ Zie README voor meest actuele UI screenshots
 ## APIs and Frameworks
 * Google Maps Android API
 * Android Media API
+* Android Sensor Framework
 
 ## Data source, database tables and fields
 Geen
