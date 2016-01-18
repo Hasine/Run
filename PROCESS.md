@@ -20,3 +20,8 @@ streetview geprobeerd toe te voegen aan startscherm maar had eerder fragmentacti
 waardoor het niet mogelijk was om het als fragment te implementeren in startactivity. Heb geprobeerd om van streetview in fragmentactivity een fragment te maken.
 ## dag 9
 fragmentactivity is weg maar heb een fragment wat gerund wordt via een adapter en een fragment in mijn activity die de streetview toont, nog niet helemaal af gekregen maar heb wel lang eraan gesleuteld.
+## dag 10
+lang gezeten met bug in startactivity wat mijn streetview niet toonde, muziekspeler afgerond.
+# Week 3
+## dag 11 
+delete markers onclick en draw polylines toegevoegd in searchactivity en af en toe gekeken naar adapter voor streetview.
