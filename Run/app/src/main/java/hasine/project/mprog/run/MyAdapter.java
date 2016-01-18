@@ -29,7 +29,7 @@ public class MyAdapter extends FragmentPagerAdapter {
             case (1):
                 return StartFragment.newInstance(position + 1);
             case (2):
-                return StartFragment.newInstance(position + 1);
+                return SavedRoute.newInstance(position + 1);
             case (3):
                 return StartFragment.newInstance(position + 1);
             default:

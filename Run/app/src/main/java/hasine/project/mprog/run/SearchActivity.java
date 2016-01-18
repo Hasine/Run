@@ -3,32 +3,26 @@ package hasine.project.mprog.run;
 // inspired by http://blog.teamtreehouse.com/beginners-guide-location-android
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.FusedLocationProviderApi;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -36,13 +30,17 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
+
 public class SearchActivity extends FragmentActivity implements
         OnMapReadyCallback,
         GoogleMap.OnMarkerDragListener,
         GoogleMap.OnMapLongClickListener,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener {
+        LocationListener, GoogleMap.OnMarkerClickListener {
 
     private GoogleMap mMap;
     private GoogleApiClient client;
@@ -51,6 +49,10 @@ public class SearchActivity extends FragmentActivity implements
     private PolylineOptions rectOptions;
     private double lat_loc, long_loc;
     private SharedPreferences SP;
+    private Polyline polyline;
+    private List<LatLng> rectOptions_points;
+    private ArrayList<Marker> markers = new ArrayList<>();
+    private ArrayList<Polyline> polylines = new ArrayList<>();
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     public static final String TAG = SearchActivity.class.getSimpleName();
 
@@ -132,15 +134,29 @@ public class SearchActivity extends FragmentActivity implements
     private void handleNewLocation(Location location) {
         Log.d(TAG, location.toString());
         myLocation = new LatLng(location.getLatitude(), location.getLongitude());
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 14));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 15));
 
         lat_loc = location.getLatitude();
         long_loc = location.getLongitude();
+        Log.i(TAG, "Now in handleNewLocation");
+
+        Marker marker = mMap.addMarker(new MarkerOptions()
+                .position(myLocation)
+                .title("First Position")
+                .draggable(true)
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+        markers.add(marker);
+        // Instantiates a new Polyline object and adds points to define a rectangle
+
+        rectOptions.add(myLocation);
+
+
     }
 
     @Override
     public void onLocationChanged(Location location) {
         handleNewLocation(location);
+        Log.i(TAG, "Now in onLocationChanged");
     }
 
     @Override
@@ -185,17 +201,18 @@ public class SearchActivity extends FragmentActivity implements
         }
         mMap.setMyLocationEnabled(true);
         mMap.setOnMarkerDragListener(this);
+        mMap.setOnMarkerClickListener(this);
         mMap.setOnMapLongClickListener(this);
-
-        // Instantiates a new Polyline object and adds points to define a rectangle
-        rectOptions = new PolylineOptions()
-                .add(myLocation);
-
+        rectOptions = new PolylineOptions();
     }
 
     @Override
     public void onMarkerDragStart(Marker marker) {
         LatLng pos = marker.getPosition();
+        Log.i(TAG, "Position marker ondragstart " + pos);
+        markers.remove(marker);
+
+        Log.i(TAG, "Current in markers array: " + markers);
     }
 
     @Override
@@ -206,21 +223,45 @@ public class SearchActivity extends FragmentActivity implements
     @Override
     public void onMarkerDragEnd(Marker marker) {
         LatLng pos = marker.getPosition();
-        Log.i(TAG, "Position marker " + pos);
-        rectOptions.add(pos);
-        mMap.addPolyline(rectOptions);
-
+        Log.i(TAG, "Position marker ondragend " + pos);
+//        rectOptions.add(pos);
+//        mMap.addPolyline(rectOptions);
+        markers.add(marker);
     }
 
     @Override
     public void onMapLongClick(LatLng latLng) {
         //create new marker when user long clicks
-        mMap.addMarker(new MarkerOptions()
+        Marker marker = mMap.addMarker(new MarkerOptions()
                 .position(latLng)
                 .draggable(true)
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-        rectOptions.add(latLng);
+        markers.add(marker);
 
-        Log.i(TAG, "Position new added marker " + latLng);
+        rectOptions.add(latLng);
+        polyline = mMap.addPolyline(rectOptions);
+
+        markers.get(0).getPosition();
+        markers.size();
+
+        Log.i(TAG, "arraylist markers: " + markers);
+        Log.i(TAG, "rectoptions points" + rectOptions.getPoints());
+
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        marker.remove();
+        markers.remove(marker);
+
+        LatLng pos = marker.getPosition();
+        rectOptions_points = rectOptions.getPoints();
+        for (int i = 0; i < rectOptions_points.size(); i++){
+            if (pos.equals(rectOptions_points.get(i))){
+                rectOptions_points.remove(pos);
+            }
+        }
+        polyline.setPoints(rectOptions_points);
+        return false;
     }
 }

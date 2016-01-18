@@ -9,9 +9,5 @@
     tools:context="hasine.project.mprog.run.Start"
     tools:showIn="@layout/activity_start">
 
-    <ListView
-        android:id="@+id/song_list"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
-    </ListView>
+
 </LinearLayout>

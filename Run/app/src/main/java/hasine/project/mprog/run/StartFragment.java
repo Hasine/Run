@@ -36,7 +36,6 @@ public class StartFragment extends Fragment {
             view = inflater.inflate(R.layout.fragment_page, container, false);
             TextView textView = (TextView) view;
             textView.setText("Fragment #" + mPage);
-            Log.i(TAG, "Now in case 1");
             return view;
     }
 }

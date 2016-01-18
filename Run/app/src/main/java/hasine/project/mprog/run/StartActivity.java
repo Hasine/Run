@@ -32,17 +32,14 @@ import com.google.android.gms.maps.model.StreetViewPanoramaLocation;
 
 
 
-public class StartActivity extends AppCompatActivity implements MediaPlayerControl, OnStreetViewPanoramaReadyCallback {
+public class StartActivity extends AppCompatActivity implements MediaPlayerControl {
 
     TabLayout tabLayout;
     ViewPager viewPager;
     private MusicController controller;
-    private double lat_loc, long_loc;
-    private ArrayList<Song> songList;
-    private ListView songView;
     private MusicService musicSrv;
     private Intent playIntent;
-    private boolean musicBound=false;
+    private boolean musicBound=false, paused=false, playbackPaused=false;
     public static String POSITION = "POSITION";
     public static final String TAG = StartActivity.class.getSimpleName();
 
@@ -51,12 +48,6 @@ public class StartActivity extends AppCompatActivity implements MediaPlayerContr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
-
-        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        lat_loc = SP.getFloat("lat_loc", 0);
-        long_loc = SP.getFloat("long_loc", 1);
-        Log.d(TAG, "lat_loc: " + lat_loc);
-        Log.d(TAG, "long_loc: " + long_loc);
 
         setController();
 
@@ -73,36 +64,13 @@ public class StartActivity extends AppCompatActivity implements MediaPlayerContr
 
         LockableViewPager.setSwipeable(true);
 
-//        StreetViewPanoramaFragment streetViewPanoramaFragment =
-//                (StreetViewPanoramaFragment) getFragmentManager()
-//                        .findFragmentById(R.id.streetviewpanorama);
-//        streetViewPanoramaFragment.getStreetViewPanoramaAsync(this);
-
-        songView = (ListView)findViewById(R.id.song_list);
-        songList = new ArrayList<>();
         getSongList();
-
-        Collections.sort(songList, new Comparator<Song>() {
-            public int compare(Song a, Song b) {
-                return a.getTitle().compareTo(b.getTitle());
-            }
-        });
-        Log.d(TAG, "songList: " + songList);
-        SongAdapter songAdt = new SongAdapter(this, songList);
-        Log.d(TAG, "songAdt: " + songAdt);
-        songView.setAdapter(songAdt);
-
-
     }
 
     private ServiceConnection musicConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             MusicService.MusicBinder binder = (MusicService.MusicBinder)service;
-            //get service
-            musicSrv = binder.getService();
-            //pass list
-            musicSrv.setList(songList);
             musicBound = true;
         }
 
@@ -111,12 +79,6 @@ public class StartActivity extends AppCompatActivity implements MediaPlayerContr
             musicBound = false;
         }
     };
-
-
-    @Override
-    public void onStreetViewPanoramaReady(StreetViewPanorama SVP) {
-        SVP.setPosition(new LatLng(lat_loc, long_loc));
-    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -140,17 +102,13 @@ public class StartActivity extends AppCompatActivity implements MediaPlayerContr
         }
     }
 
-    public void songPicked(View view){
-        musicSrv.setSong(Integer.parseInt(view.getTag().toString()));
-        musicSrv.playSong();
-    }
-
     @Override
     protected void onDestroy() {
         stopService(playIntent);
         musicSrv=null;
         super.onDestroy();
     }
+
 
     /**
      * Menu settings
@@ -171,11 +129,8 @@ public class StartActivity extends AppCompatActivity implements MediaPlayerContr
         int id = item.getItemId();
 
         switch (id) {
-            case R.id.action_settings:
-//                Intent gotosettings = new Intent(this, MusicSettings.class);
-//                startActivity(gotosettings);
             case R.id.action_shuffle:
-                //shuffle
+                musicSrv.setShuffle();
                 break;
             case R.id.action_end:
                 stopService(playIntent);
@@ -194,15 +149,20 @@ public class StartActivity extends AppCompatActivity implements MediaPlayerContr
     /**
      * Music player settings
      */
-
     @Override
-    public void start() {
-
+    public void pause() {
+        playbackPaused=true;
+        musicSrv.pausePlayer();
     }
 
     @Override
-    public void pause() {
+    public void seekTo(int pos) {
+        musicSrv.seek(pos);
+    }
 
+    @Override
+    public void start() {
+        musicSrv.go();
     }
 
     public void getSongList() {
@@ -221,9 +181,6 @@ public class StartActivity extends AppCompatActivity implements MediaPlayerContr
             //add songs to list
             do {
                 long thisId = musicCursor.getLong(idColumn);
-                String thisTitle = musicCursor.getString(titleColumn);
-                String thisArtist = musicCursor.getString(artistColumn);
-                songList.add(new Song(thisId, thisTitle, thisArtist));
             }
             while (musicCursor.moveToNext());
         }
@@ -232,21 +189,22 @@ public class StartActivity extends AppCompatActivity implements MediaPlayerContr
 
     @Override
     public int getDuration() {
+        if(musicSrv!=null && musicBound && musicSrv.isPng())
+            return musicSrv.getDur();
         return 0;
     }
 
     @Override
     public int getCurrentPosition() {
+        if(musicSrv!=null && musicBound && musicSrv.isPng())
+            return musicSrv.getPosn();
         return 0;
     }
 
     @Override
-    public void seekTo(int pos) {
-
-    }
-
-    @Override
     public boolean isPlaying() {
+        if(musicSrv!=null && musicBound)
+            return musicSrv.isPng();
         return false;
     }
 
@@ -257,17 +215,17 @@ public class StartActivity extends AppCompatActivity implements MediaPlayerContr
 
     @Override
     public boolean canPause() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean canSeekBackward() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean canSeekForward() {
-        return false;
+        return true;
     }
 
     @Override
@@ -275,22 +233,63 @@ public class StartActivity extends AppCompatActivity implements MediaPlayerContr
         return 0;
     }
 
+
     private void setController(){
         //set the controller up
         controller = new MusicController(this);
-//        controller.setPrevNextListeners(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                playNext();
-//            }
-//        }, new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                playPrev();
-//            }
-//        });
-//        controller.setMediaPlayer(this);
-//        controller.setAnchorView(findViewById(R.id.song_list));
-//        controller.setEnabled(true);
+        controller.setPrevNextListeners(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                playNext();
+            }
+        }, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                playPrev();
+            }
+        });
+        controller.setMediaPlayer(this);
+        controller.setEnabled(true);
     }
+
+    private void playNext(){
+        musicSrv.playNext();
+        if(playbackPaused) {
+            setController();
+            playbackPaused=false;
+        }
+        controller.show(0);
+    }
+
+    private void playPrev(){
+        musicSrv.playPrev();
+        if(playbackPaused){
+            setController();
+            playbackPaused=false;
+        }
+        controller.show(0);
+    }
+
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        paused=true;
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        if(paused){
+            setController();
+            paused=false;
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        controller.hide();
+        super.onStop();
+    }
+
 }

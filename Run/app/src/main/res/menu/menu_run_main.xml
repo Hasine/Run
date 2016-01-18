@@ -4,21 +4,16 @@
     tools:context="hasine.project.mprog.run.RunMainActivity">
 
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/action_shuffle"
         android:icon="@drawable/rand"
         android:orderInCategory="1"
-        app:showAsAction="always"
+        app:showAsAction="never"
         android:title="@string/shuffle"/>
 
     <item
         android:id="@+id/action_end"
         android:icon="@drawable/end"
         android:orderInCategory="2"
-        app:showAsAction="always"
+        app:showAsAction="never"
         android:title="@string/end"/>
 </menu>
