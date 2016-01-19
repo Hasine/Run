@@ -27,12 +27,14 @@ import android.widget.MediaController.MediaPlayerControl;
 import com.google.android.gms.maps.OnStreetViewPanoramaReadyCallback;
 import com.google.android.gms.maps.StreetViewPanorama;
 import com.google.android.gms.maps.StreetViewPanoramaFragment;
+import com.google.android.gms.maps.StreetViewPanoramaView;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.StreetViewPanoramaCamera;
 import com.google.android.gms.maps.model.StreetViewPanoramaLocation;
 
 
 
-public class StartActivity extends AppCompatActivity implements MediaPlayerControl {
+public class StartActivity extends AppCompatActivity implements  OnStreetViewPanoramaReadyCallback {
 
     TabLayout tabLayout;
     ViewPager viewPager;
@@ -41,6 +43,7 @@ public class StartActivity extends AppCompatActivity implements MediaPlayerContr
     private Intent playIntent;
     private boolean musicBound=false, paused=false, playbackPaused=false;
     public static String POSITION = "POSITION";
+    private double lat_loc, long_loc;
     public static final String TAG = StartActivity.class.getSimpleName();
 
 
@@ -49,7 +52,7 @@ public class StartActivity extends AppCompatActivity implements MediaPlayerContr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
-        setController();
+//        setController();
 
 
         // Get the ViewPager and set it's PagerAdapter so that it can display items
@@ -63,8 +66,30 @@ public class StartActivity extends AppCompatActivity implements MediaPlayerContr
         tabLayout.setupWithViewPager(viewPager);
 
         LockableViewPager.setSwipeable(true);
+//        getSongList();  implements MediaPlayerControl,
 
-        getSongList();
+        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        lat_loc = SP.getFloat("lat_loc", 0);
+        long_loc = SP.getFloat("long_loc", 1);
+        Log.d(TAG, "lat_loc: " + lat_loc);
+        Log.d(TAG, "long_loc: " + long_loc);
+
+        StreetViewPanoramaFragment streetViewPanoramaFragment =
+                (StreetViewPanoramaFragment) getFragmentManager()
+                        .findFragmentById(R.id.streetviewpanorama);
+        streetViewPanoramaFragment.getStreetViewPanoramaAsync(this);
+
+    }
+
+    @Override
+    public void onStreetViewPanoramaReady(StreetViewPanorama SVP) {
+        Log.i(TAG, "loc streetview: " + lat_loc + long_loc);
+        SVP.setPosition(new LatLng(-33.87365, 151.20689));
+//        (lat_loc, long_loc)
+        StreetViewPanoramaCamera camera = new StreetViewPanoramaCamera.Builder()
+                .bearing(180)
+                .build();
+        SVP.animateTo(camera, 10000);
     }
 
     private ServiceConnection musicConnection = new ServiceConnection() {
@@ -145,151 +170,148 @@ public class StartActivity extends AppCompatActivity implements MediaPlayerContr
 
 
 
-
-    /**
-     * Music player settings
-     */
-    @Override
-    public void pause() {
-        playbackPaused=true;
-        musicSrv.pausePlayer();
-    }
-
-    @Override
-    public void seekTo(int pos) {
-        musicSrv.seek(pos);
-    }
-
-    @Override
-    public void start() {
-        musicSrv.go();
-    }
-
-    public void getSongList() {
-        //retrieve song info
-        ContentResolver musicResolver = getContentResolver();
-        Uri musicUri = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        Cursor musicCursor = musicResolver.query(musicUri, null, null, null, null);
-        if(musicCursor!=null && musicCursor.moveToFirst()){
-            //get columns
-            int titleColumn = musicCursor.getColumnIndex
-                    (android.provider.MediaStore.Audio.Media.TITLE);
-            int idColumn = musicCursor.getColumnIndex
-                    (android.provider.MediaStore.Audio.Media._ID);
-            int artistColumn = musicCursor.getColumnIndex
-                    (android.provider.MediaStore.Audio.Media.ARTIST);
-            //add songs to list
-            do {
-                long thisId = musicCursor.getLong(idColumn);
-            }
-            while (musicCursor.moveToNext());
-        }
-
-    }
-
-    @Override
-    public int getDuration() {
-        if(musicSrv!=null && musicBound && musicSrv.isPng())
-            return musicSrv.getDur();
-        return 0;
-    }
-
-    @Override
-    public int getCurrentPosition() {
-        if(musicSrv!=null && musicBound && musicSrv.isPng())
-            return musicSrv.getPosn();
-        return 0;
-    }
-
-    @Override
-    public boolean isPlaying() {
-        if(musicSrv!=null && musicBound)
-            return musicSrv.isPng();
-        return false;
-    }
-
-    @Override
-    public int getBufferPercentage() {
-        return 0;
-    }
-
-    @Override
-    public boolean canPause() {
-        return true;
-    }
-
-    @Override
-    public boolean canSeekBackward() {
-        return true;
-    }
-
-    @Override
-    public boolean canSeekForward() {
-        return true;
-    }
-
-    @Override
-    public int getAudioSessionId() {
-        return 0;
-    }
-
-
-    private void setController(){
-        //set the controller up
-        controller = new MusicController(this);
-        controller.setPrevNextListeners(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                playNext();
-            }
-        }, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                playPrev();
-            }
-        });
-        controller.setMediaPlayer(this);
-        controller.setEnabled(true);
-    }
-
-    private void playNext(){
-        musicSrv.playNext();
-        if(playbackPaused) {
-            setController();
-            playbackPaused=false;
-        }
-        controller.show(0);
-    }
-
-    private void playPrev(){
-        musicSrv.playPrev();
-        if(playbackPaused){
-            setController();
-            playbackPaused=false;
-        }
-        controller.show(0);
-    }
-
-
-    @Override
-    protected void onPause(){
-        super.onPause();
-        paused=true;
-    }
-
-    @Override
-    protected void onResume(){
-        super.onResume();
-        if(paused){
-            setController();
-            paused=false;
-        }
-    }
-
-    @Override
-    protected void onStop() {
-        controller.hide();
-        super.onStop();
-    }
-
+//
+//    /**
+//     * Music player settings
+//     */
+//    @Override
+//    public void pause() {
+//        playbackPaused=true;
+//        musicSrv.pausePlayer();
+//    }
+//
+//    @Override
+//    public void seekTo(int pos) {
+//        musicSrv.seek(pos);
+//    }
+//
+//    @Override
+//    public void start() {
+//        musicSrv.go();
+//    }
+//
+//    public void getSongList() {
+//        //retrieve song info
+//        ContentResolver musicResolver = getContentResolver();
+//        Uri musicUri = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+//        Cursor musicCursor = musicResolver.query(musicUri, null, null, null, null);
+//        if(musicCursor!=null && musicCursor.moveToFirst()){
+//            //get columns
+//            int titleColumn = musicCursor.getColumnIndex
+//                    (android.provider.MediaStore.Audio.Media.TITLE);
+//            int idColumn = musicCursor.getColumnIndex
+//                    (android.provider.MediaStore.Audio.Media._ID);
+//            int artistColumn = musicCursor.getColumnIndex
+//                    (android.provider.MediaStore.Audio.Media.ARTIST);
+//            //add songs to list
+//            do {
+//                long thisId = musicCursor.getLong(idColumn);
+//            }
+//            while (musicCursor.moveToNext());
+//        }
+//
+//    }
+//
+//    @Override
+//    public int getDuration() {
+//        if(musicSrv!=null && musicBound && musicSrv.isPng())
+//            return musicSrv.getDur();
+//        return 0;
+//    }
+//
+//    @Override
+//    public int getCurrentPosition() {
+//        if(musicSrv!=null && musicBound && musicSrv.isPng())
+//            return musicSrv.getPosn();
+//        return 0;
+//    }
+//
+//    @Override
+//    public boolean isPlaying() {
+//        if(musicSrv!=null && musicBound)
+//            return musicSrv.isPng();
+//        return false;
+//    }
+//
+//    @Override
+//    public int getBufferPercentage() {
+//        return 0;
+//    }
+//
+//    @Override
+//    public boolean canPause() {
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean canSeekBackward() {
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean canSeekForward() {
+//        return true;
+//    }
+//
+//    @Override
+//    public int getAudioSessionId() {
+//        return 0;
+//    }
+//
+//    private void setController(){
+//        //set the controller up
+//        controller = new MusicController(this);
+//        controller.setPrevNextListeners(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                playNext();
+//            }
+//        }, new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                playPrev();
+//            }
+//        });
+//        controller.setMediaPlayer(this);
+//        controller.setEnabled(true);
+//    }
+//
+//    private void playNext(){
+//        musicSrv.playNext();
+//        if(playbackPaused) {
+//            setController();
+//            playbackPaused=false;
+//        }
+//        controller.show(0);
+//    }
+//
+//    private void playPrev(){
+//        musicSrv.playPrev();
+//        if(playbackPaused){
+//            setController();
+//            playbackPaused=false;
+//        }
+//        controller.show(0);
+//    }
+//
+//    @Override
+//    protected void onPause(){
+//        super.onPause();
+//        paused=true;
+//    }
+//
+//    @Override
+//    protected void onResume(){
+//        super.onResume();
+//        if(paused){
+//            setController();
+//            paused=false;
+//        }
+//    }
+//
+//    @Override
+//    protected void onStop() {
+//        controller.hide();
+//        super.onStop();
+//    }
 }

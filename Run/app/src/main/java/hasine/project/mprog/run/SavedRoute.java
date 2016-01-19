@@ -14,14 +14,17 @@ import android.widget.TextView;
 import com.google.android.gms.maps.OnStreetViewPanoramaReadyCallback;
 import com.google.android.gms.maps.StreetViewPanorama;
 import com.google.android.gms.maps.StreetViewPanoramaFragment;
+import com.google.android.gms.maps.StreetViewPanoramaView;
 import com.google.android.gms.maps.SupportStreetViewPanoramaFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.StreetViewPanoramaCamera;
 
-public class SavedRoute extends SupportStreetViewPanoramaFragment implements OnStreetViewPanoramaReadyCallback {
+public class SavedRoute extends SupportStreetViewPanoramaFragment {
 
     public static final String ARG_PAGE = "ARG_PAGE";
     private int mPage;
-    private double lat_loc, long_loc;
+    StreetViewPanoramaView SVPV;
+    StreetViewPanorama mPanorama;
     public static final String TAG = SavedRoute.class.getSimpleName();
 //    private OnFragmentInteractionListener mListener;
 
@@ -41,29 +44,47 @@ public class SavedRoute extends SupportStreetViewPanoramaFragment implements OnS
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPage = getArguments().getInt(ARG_PAGE);
-
-        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getContext());
-        lat_loc = SP.getFloat("lat_loc", 0);
-        long_loc = SP.getFloat("long_loc", 1);
-        Log.d(TAG, "lat_loc: " + lat_loc);
-        Log.d(TAG, "long_loc: " + long_loc);
     }
 
-    @Override
-    public void onStreetViewPanoramaReady(StreetViewPanorama SVP) {
-        SVP.setPosition(new LatLng(lat_loc, long_loc));
-    }
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+//                             Bundle savedInstanceState) {
+//        return inflater.inflate(R.layout.fragment_page, container, false);
+//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View view = inflater.inflate( R.layout.fragment_saved_route, container, false );
 
-//        StreetViewPanoramaFragment streetViewPanoramaFragment =
-//                (StreetViewPanoramaFragment) getFragmentManager()
-//                        .findFragmentById(R.id.streetviewpanorama);
-//        streetViewPanoramaFragment.getStreetViewPanoramaAsync(this);
+        SVPV = (StreetViewPanoramaView) view.findViewById(R.id.street_view_panorama);
+        SVPV.onCreate(savedInstanceState);
 
-        return inflater.inflate(R.layout.fragment_saved_route, container, false);
+
+        initStreetView();
+        return view;
     }
 
+    private void initStreetView() {
+        SVPV.getStreetViewPanoramaAsync(new OnStreetViewPanoramaReadyCallback() {
+            @Override
+            public void onStreetViewPanoramaReady(StreetViewPanorama panorama) {
+                mPanorama = panorama;
+                showStreetView(new LatLng(40.7506, -73.9936));
+            }
+        });
+    }
+
+    private void showStreetView( LatLng latLng ) {
+        if( mPanorama == null )
+            return;
+
+        StreetViewPanoramaCamera.Builder builder = new StreetViewPanoramaCamera.Builder( mPanorama.getPanoramaCamera() );
+        builder.tilt( 0.0f );
+        builder.zoom( 0.0f );
+        builder.bearing( 0.0f );
+        mPanorama.animateTo( builder.build(), 0 );
+        mPanorama.setPosition( latLng, 300 );
+        mPanorama.setStreetNamesEnabled(true);
+    }
 }

@@ -27,10 +27,13 @@ public class MyAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case (1):
+                Log.i(TAG, "position case 1: " + position);
                 return StartFragment.newInstance(position + 1);
             case (2):
+                Log.i(TAG, "position case 2: " + position);
                 return SavedRoute.newInstance(position + 1);
             case (3):
+                Log.i(TAG, "position case 3: " + position);
                 return StartFragment.newInstance(position + 1);
             default:
                 return new Fragment();

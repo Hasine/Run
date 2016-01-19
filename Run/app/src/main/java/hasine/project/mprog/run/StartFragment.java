@@ -14,7 +14,6 @@ public class StartFragment extends Fragment {
     public static final String ARG_PAGE = "ARG_PAGE";
     public static final String TAG = StartFragment.class.getSimpleName();
     private int mPage;
-    private View view;
 
     public static StartFragment newInstance(int page) {
         Bundle args = new Bundle();
@@ -33,7 +32,7 @@ public class StartFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-            view = inflater.inflate(R.layout.fragment_page, container, false);
+            View view = inflater.inflate(R.layout.fragment_page, container, false);
             TextView textView = (TextView) view;
             textView.setText("Fragment #" + mPage);
             return view;

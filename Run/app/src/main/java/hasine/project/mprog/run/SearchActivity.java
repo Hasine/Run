@@ -52,7 +52,6 @@ public class SearchActivity extends FragmentActivity implements
     private Polyline polyline;
     private List<LatLng> rectOptions_points;
     private ArrayList<Marker> markers = new ArrayList<>();
-    private ArrayList<Polyline> polylines = new ArrayList<>();
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     public static final String TAG = SearchActivity.class.getSimpleName();
 
@@ -208,11 +207,16 @@ public class SearchActivity extends FragmentActivity implements
 
     @Override
     public void onMarkerDragStart(Marker marker) {
-        LatLng pos = marker.getPosition();
-        Log.i(TAG, "Position marker ondragstart " + pos);
         markers.remove(marker);
 
-        Log.i(TAG, "Current in markers array: " + markers);
+        LatLng pos = marker.getPosition();
+        rectOptions_points = rectOptions.getPoints();
+        for (int i = 0; i < rectOptions_points.size(); i++){
+            if (pos.equals(rectOptions_points.get(i))){
+                rectOptions_points.remove(pos);
+            }
+        }
+
     }
 
     @Override
@@ -222,11 +226,11 @@ public class SearchActivity extends FragmentActivity implements
 
     @Override
     public void onMarkerDragEnd(Marker marker) {
-        LatLng pos = marker.getPosition();
-        Log.i(TAG, "Position marker ondragend " + pos);
-//        rectOptions.add(pos);
-//        mMap.addPolyline(rectOptions);
         markers.add(marker);
+
+        LatLng pos = marker.getPosition();
+        rectOptions_points.add(pos);
+        polyline.setPoints(rectOptions_points);
     }
 
     @Override
@@ -238,15 +242,15 @@ public class SearchActivity extends FragmentActivity implements
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
         markers.add(marker);
 
-        rectOptions.add(latLng);
+        rectOptions.add(latLng).geodesic(true);
         polyline = mMap.addPolyline(rectOptions);
+
 
         markers.get(0).getPosition();
         markers.size();
 
         Log.i(TAG, "arraylist markers: " + markers);
         Log.i(TAG, "rectoptions points" + rectOptions.getPoints());
-
     }
 
     @Override
@@ -255,13 +259,15 @@ public class SearchActivity extends FragmentActivity implements
         markers.remove(marker);
 
         LatLng pos = marker.getPosition();
-        rectOptions_points = rectOptions.getPoints();
+        List<LatLng> rectOptions_points = rectOptions.getPoints();
         for (int i = 0; i < rectOptions_points.size(); i++){
             if (pos.equals(rectOptions_points.get(i))){
                 rectOptions_points.remove(pos);
             }
         }
+        polyline.setVisible(false);
         polyline.setPoints(rectOptions_points);
+//        polyline.setVisible(true);
         return false;
     }
 }
