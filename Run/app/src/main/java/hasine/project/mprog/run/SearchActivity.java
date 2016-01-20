@@ -1,6 +1,19 @@
 package hasine.project.mprog.run;
 
 // inspired by http://blog.teamtreehouse.com/beginners-guide-location-android
+//Copyright 2013 Google Inc.
+//
+//        Licensed under the Apache License, Version 2.0 (the "License");
+//        you may not use this file except in compliance with the License.
+//        You may obtain a copy of the License at
+//
+//        http://www.apache.org/licenses/LICENSE-2.0
+//
+//        Unless required by applicable law or agreed to in writing, software
+//        distributed under the License is distributed on an "AS IS" BASIS,
+//        WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//        See the License for the specific language governing permissions and
+//        limitations under the License.
 
 import android.Manifest;
 import android.content.IntentSender;
@@ -8,11 +21,14 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -32,7 +48,6 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
 
 public class SearchActivity extends FragmentActivity implements
         OnMapReadyCallback,
@@ -48,11 +63,15 @@ public class SearchActivity extends FragmentActivity implements
     private LatLng myLocation;
     private PolylineOptions rectOptions;
     private double lat_loc, long_loc;
+    private String goal;
     private SharedPreferences SP;
+    private TextView mTextView;
+    private EditText mEditText;
     List<Polyline> polylines = new ArrayList<>();
     private ArrayList<Marker> markers = new ArrayList<>();
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     public static final String TAG = SearchActivity.class.getSimpleName();
+    private double total_distance = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +95,8 @@ public class SearchActivity extends FragmentActivity implements
                 .setFastestInterval(1 * 1000); // 1 second, in milliseconds
 
         SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        mTextView = (TextView) findViewById(R.id.textView);
+        mEditText = (EditText) findViewById(R.id.editText);
     }
 
     @Override
@@ -93,11 +114,11 @@ public class SearchActivity extends FragmentActivity implements
     @Override
     protected void onPause() {
         super.onPause();
-        Log.d(TAG, "location.lat in onPause: " + lat_loc);
-        Log.d(TAG, "location.long in onPause: " + long_loc);
+
         SharedPreferences.Editor SPEditor = SP.edit();
         SPEditor.putFloat("lat_loc", (float) lat_loc);
         SPEditor.putFloat("long_loc", (float) long_loc);
+        SPEditor.putString("goal", goal);
         SPEditor.commit();
 
 
@@ -132,7 +153,7 @@ public class SearchActivity extends FragmentActivity implements
     private void handleNewLocation(Location location) {
         Log.d(TAG, location.toString());
         myLocation = new LatLng(location.getLatitude(), location.getLongitude());
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 15));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 16));
 
         lat_loc = location.getLatitude();
         long_loc = location.getLongitude();
@@ -234,11 +255,17 @@ public class SearchActivity extends FragmentActivity implements
         marker.showInfoWindow();
         markers.add(marker);
 
+        for (int i = 0; i < markers.size() - 1; i++){
+            total_distance +=
+                    calcDistance(markers.get(i).getPosition(), markers.get(i + 1).getPosition());
+        }
+
         if (markers.size() <= 2){
             rectOptions.add(latLng);
         }
 
         if (markers.size() > 2){
+            total_distance -= calcDistance(markers.get(markers.size() - 1).getPosition(), myLocation);
             for(Polyline line : polylines) {
                 line.remove();
             }
@@ -249,10 +276,15 @@ public class SearchActivity extends FragmentActivity implements
             }
             rectOptions.add(latLng);
             rectOptions.getPoints().add(markers.size(), myLocation);
+
         }
+
+        total_distance +=  calcDistance(latLng, myLocation);
 
         Polyline polyline = mMap.addPolyline(rectOptions);
         polylines.add(polyline);
+
+        mTextView.setText("Length route: " + formatNumber(total_distance));
     }
 
     @Override
@@ -279,7 +311,33 @@ public class SearchActivity extends FragmentActivity implements
 
         Polyline polyline = mMap.addPolyline(rectOptions);
         polylines.add(polyline);
-        
+
+        total_distance = 0;
+        for (int i = 0; i < rectOptions.getPoints().size() - 1; i++){
+            total_distance +=
+                    calcDistance(rectOptions.getPoints().get(i), rectOptions.getPoints().get(i + 1));
+        }
+        mTextView.setText("Length route: " + formatNumber(total_distance));
         return false;
+    }
+
+    private double calcDistance(LatLng start, LatLng end) {
+        return SphericalUtil.computeDistanceBetween(start, end);
+    }
+
+
+    private String formatNumber(double distance) {
+        String unit = "m";
+        if (distance > 1000) {
+            distance /= 1000;
+            unit = "km";
+            return String.format("%4.3f%s", distance, unit);
+        }
+        return String.format("%4.0f%s", distance, unit);
+    }
+
+    public void savegoal(View view) {
+        goal = mEditText.getText().toString();
+        Toast.makeText(this, "Goal Saved!", Toast.LENGTH_SHORT).show();
     }
 }

@@ -38,7 +38,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.StreetViewPanoramaCamera;
 import com.google.android.gms.maps.model.StreetViewPanoramaLocation;
 
-public class FragmentTabs extends FragmentActivity implements OnStreetViewPanoramaReadyCallback {
+public class FragmentTabs extends AppCompatActivity implements OnStreetViewPanoramaReadyCallback {
 
     private FragmentTabHost mTabHost;
     TabLayout tabLayout;
@@ -49,6 +49,7 @@ public class FragmentTabs extends FragmentActivity implements OnStreetViewPanora
     private boolean musicBound=false, paused=false, playbackPaused=false;
     public static String POSITION = "POSITION";
     private double lat_loc, long_loc;
+    private String goal;
     public static final String TAG = FragmentTabs.class.getSimpleName();
 
 
@@ -76,8 +77,10 @@ public class FragmentTabs extends FragmentActivity implements OnStreetViewPanora
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         lat_loc = SP.getFloat("lat_loc", 0);
         long_loc = SP.getFloat("long_loc", 1);
+        goal = SP.getString("goal", "goal not found");
         Log.d(TAG, "lat_loc: " + lat_loc);
         Log.d(TAG, "long_loc: " + long_loc);
+        Log.d(TAG, "goal in m: " + goal);
 
         StreetViewPanoramaFragment streetViewPanoramaFragment =
                 (StreetViewPanoramaFragment) getFragmentManager()
