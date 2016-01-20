@@ -13,7 +13,7 @@ public class MyAdapter extends FragmentPagerAdapter {
     private Context context;
     public static final String TAG = MyAdapter.class.getSimpleName();
 
-    public MyAdapter(FragmentManager fm, StartActivity context) {
+    public MyAdapter(FragmentManager fm, FragmentTabs context) {
         super(fm);
         this.context = context;
     }

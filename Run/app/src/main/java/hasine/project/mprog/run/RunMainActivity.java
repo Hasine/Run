@@ -30,7 +30,7 @@ public class RunMainActivity extends AppCompatActivity {
     }
 
     public void start(View view) {
-        Intent gotoStart = new Intent(this, StartActivity.class);
+        Intent gotoStart = new Intent(this, FragmentTabs.class);
         startActivity(gotoStart);
     }
 

@@ -3,9 +3,14 @@ package hasine.project.mprog.run;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+
+import android.app.TabActivity;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.content.ContentResolver;
 import android.database.Cursor;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTabHost;
 import android.widget.ListView;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -24,6 +29,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.MediaController.MediaPlayerControl;
+
 import com.google.android.gms.maps.OnStreetViewPanoramaReadyCallback;
 import com.google.android.gms.maps.StreetViewPanorama;
 import com.google.android.gms.maps.StreetViewPanoramaFragment;
@@ -32,10 +38,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.StreetViewPanoramaCamera;
 import com.google.android.gms.maps.model.StreetViewPanoramaLocation;
 
+public class FragmentTabs extends FragmentActivity implements OnStreetViewPanoramaReadyCallback {
 
-
-public class StartActivity extends AppCompatActivity implements  OnStreetViewPanoramaReadyCallback {
-
+    private FragmentTabHost mTabHost;
     TabLayout tabLayout;
     ViewPager viewPager;
     private MusicController controller;
@@ -44,21 +49,21 @@ public class StartActivity extends AppCompatActivity implements  OnStreetViewPan
     private boolean musicBound=false, paused=false, playbackPaused=false;
     public static String POSITION = "POSITION";
     private double lat_loc, long_loc;
-    public static final String TAG = StartActivity.class.getSimpleName();
+    public static final String TAG = FragmentTabs.class.getSimpleName();
 
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
-//        setController();
 
+//        setController();
 
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         MyAdapter pagerAdapter =
-                new MyAdapter(getSupportFragmentManager(), StartActivity.this);
+                new MyAdapter(getSupportFragmentManager(), FragmentTabs.this);
         viewPager.setAdapter(pagerAdapter);
 
         // Give the TabLayout the ViewPager

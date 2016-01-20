@@ -49,8 +49,7 @@ public class SearchActivity extends FragmentActivity implements
     private PolylineOptions rectOptions;
     private double lat_loc, long_loc;
     private SharedPreferences SP;
-    private Polyline polyline;
-    private List<LatLng> rectOptions_points;
+    List<Polyline> polylines = new ArrayList<>();
     private ArrayList<Marker> markers = new ArrayList<>();
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     public static final String TAG = SearchActivity.class.getSimpleName();
@@ -141,15 +140,14 @@ public class SearchActivity extends FragmentActivity implements
 
         Marker marker = mMap.addMarker(new MarkerOptions()
                 .position(myLocation)
-                .title("First Position")
+                .title("First Place")
                 .draggable(true)
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+        marker.showInfoWindow();
         markers.add(marker);
         // Instantiates a new Polyline object and adds points to define a rectangle
 
         rectOptions.add(myLocation);
-
-
     }
 
     @Override
@@ -209,13 +207,6 @@ public class SearchActivity extends FragmentActivity implements
     public void onMarkerDragStart(Marker marker) {
         markers.remove(marker);
 
-        LatLng pos = marker.getPosition();
-        rectOptions_points = rectOptions.getPoints();
-        for (int i = 0; i < rectOptions_points.size(); i++){
-            if (pos.equals(rectOptions_points.get(i))){
-                rectOptions_points.remove(pos);
-            }
-        }
 
     }
 
@@ -228,29 +219,40 @@ public class SearchActivity extends FragmentActivity implements
     public void onMarkerDragEnd(Marker marker) {
         markers.add(marker);
 
-        LatLng pos = marker.getPosition();
-        rectOptions_points.add(pos);
-        polyline.setPoints(rectOptions_points);
+
     }
 
     @Override
     public void onMapLongClick(LatLng latLng) {
         //create new marker when user long clicks
+        int size = markers.size() + 1;
         Marker marker = mMap.addMarker(new MarkerOptions()
                 .position(latLng)
                 .draggable(true)
+                .title(size + " Place")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+        marker.showInfoWindow();
         markers.add(marker);
 
-        rectOptions.add(latLng).geodesic(true);
-        polyline = mMap.addPolyline(rectOptions);
+        if (markers.size() <= 2){
+            rectOptions.add(latLng);
+        }
 
+        if (markers.size() > 2){
+            for(Polyline line : polylines) {
+                line.remove();
+            }
+            polylines.clear();
 
-        markers.get(0).getPosition();
-        markers.size();
+            if (markers.size() > 3){
+                rectOptions.getPoints().remove(markers.size() - 1);
+            }
+            rectOptions.add(latLng);
+            rectOptions.getPoints().add(markers.size(), myLocation);
+        }
 
-        Log.i(TAG, "arraylist markers: " + markers);
-        Log.i(TAG, "rectoptions points" + rectOptions.getPoints());
+        Polyline polyline = mMap.addPolyline(rectOptions);
+        polylines.add(polyline);
     }
 
     @Override
@@ -258,16 +260,26 @@ public class SearchActivity extends FragmentActivity implements
         marker.remove();
         markers.remove(marker);
 
-        LatLng pos = marker.getPosition();
-        List<LatLng> rectOptions_points = rectOptions.getPoints();
-        for (int i = 0; i < rectOptions_points.size(); i++){
-            if (pos.equals(rectOptions_points.get(i))){
-                rectOptions_points.remove(pos);
-            }
+        for(Polyline line : polylines) {
+            line.remove();
         }
-        polyline.setVisible(false);
-        polyline.setPoints(rectOptions_points);
-//        polyline.setVisible(true);
+        polylines.clear();
+
+        rectOptions.getPoints().clear();
+        rectOptions = new PolylineOptions();
+
+        for (Marker mar : markers){
+            LatLng position = mar.getPosition();
+            rectOptions.add(position);
+        }
+
+        if (markers.size() > 2){
+            rectOptions.getPoints().add(markers.size(), myLocation);
+        }
+
+        Polyline polyline = mMap.addPolyline(rectOptions);
+        polylines.add(polyline);
+        
         return false;
     }
 }
