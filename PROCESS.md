@@ -25,3 +25,7 @@ lang gezeten met bug in startactivity wat mijn streetview niet toonde, muziekspe
 # Week 3
 ## dag 11 
 delete markers onclick en draw polylines toegevoegd in searchactivity en af en toe gekeken naar adapter voor streetview.
+## dag 12
+aan streetview gezeten, heel lang met adapters en view geprutseld, zonder resultaat.
+## dag 13
+searchactivity is done! gesloten routes, edittext voor goal geimplementeerd en lengte route wordt getoond
