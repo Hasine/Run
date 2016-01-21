@@ -16,6 +16,7 @@ package hasine.project.mprog.run;
 //        limitations under the License.
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -49,7 +50,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchActivity extends FragmentActivity implements
+public class MakeActivity extends FragmentActivity implements
         OnMapReadyCallback,
         GoogleMap.OnMarkerDragListener,
         GoogleMap.OnMapLongClickListener,
@@ -67,16 +68,17 @@ public class SearchActivity extends FragmentActivity implements
     private SharedPreferences SP;
     private TextView mTextView;
     private EditText mEditText;
+    private int index;
     List<Polyline> polylines = new ArrayList<>();
     private ArrayList<Marker> markers = new ArrayList<>();
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
-    public static final String TAG = SearchActivity.class.getSimpleName();
+    public static final String TAG = MakeActivity.class.getSimpleName();
     private double total_distance = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
+        setContentView(R.layout.activity_make);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -226,21 +228,95 @@ public class SearchActivity extends FragmentActivity implements
 
     @Override
     public void onMarkerDragStart(Marker marker) {
+        for (int i = 0; i < markers.size(); i++){
+            // if marker is found in markers and there are more than 2 markers
+            if (markers.size() > 2 && marker.equals(markers.get(i))){
+                index = i;
+                // first marker is on drag
+                if (index == 0){
+                    total_distance -=
+                            (calcDistance(markers.get(markers.size() - 1).getPosition(), markers.get(i).getPosition())
+                                    + calcDistance(markers.get(i).getPosition(), markers.get(i + 1).getPosition()));
+                    rectOptions.getPoints().remove(markers.size());
+                }
+                // last marker is on drag
+                else if (index == markers.size() - 1){
+                    total_distance -=
+                            (calcDistance(markers.get(i - 1).getPosition(), markers.get(i).getPosition())
+                                    + calcDistance(markers.get(i).getPosition(), markers.get(0).getPosition()));
+                }
+                else{
+                    total_distance -=
+                            (calcDistance(markers.get(i - 1).getPosition(), markers.get(i).getPosition())
+                                    + calcDistance(markers.get(i).getPosition(), markers.get(i + 1).getPosition()));
+                }
+            }else if (marker.equals(markers.get(i))) {
+                index = i;
+                total_distance = 0;
+            }
+        }
+
         markers.remove(marker);
+        Log.d(TAG, "rect: " + rectOptions.getPoints());
+        rectOptions.getPoints().remove(index);
+        Log.d(TAG, "rect after remove: " + rectOptions.getPoints());
+        for(Polyline line : polylines) {
+            line.remove();
+        }
+        polylines.clear();
 
-
+        mTextView.setText("Length route: " + formatNumber(total_distance));
     }
 
     @Override
     public void onMarkerDrag(Marker marker) {
-
+        mTextView.setText("Calculating route!");
     }
 
     @Override
     public void onMarkerDragEnd(Marker marker) {
-        markers.add(marker);
+        markers.add(index, marker);
 
+        for (int i = 0; i < markers.size(); i++){
+            if (marker.equals(markers.get(i)) && markers.size() > 2){
+                index = i;
+                // first marker has been dragged
+                if (index == 0){
+                    total_distance +=
+                            (calcDistance(markers.get(markers.size() - 1).getPosition(), markers.get(i).getPosition())
+                                    + calcDistance(markers.get(i).getPosition(), markers.get(i + 1).getPosition()));
+                    rectOptions.getPoints().add(marker.getPosition());
+                }
+                // last marker has been dragged
+                else if (index == markers.size() - 1){
+                    total_distance +=
+                            (calcDistance(markers.get(i - 1).getPosition(), markers.get(i).getPosition())
+                                    + calcDistance(markers.get(i).getPosition(), markers.get(0).getPosition()));
+                }
+                else{
+                    total_distance +=
+                            (calcDistance(markers.get(i - 1).getPosition(), markers.get(i).getPosition())
+                                    + calcDistance(markers.get(i).getPosition(), markers.get(i + 1).getPosition()));
+                }
+            } else if(marker.equals(markers.get(i)) && markers.size() == 2){
+                // second marker has been dragged
+                if (index == 1){
+                    total_distance +=
+                            2 * calcDistance(markers.get(i).getPosition(), markers.get(i - 1).getPosition());
+                }else {
+                    Log.d(TAG, "first drag end rect: " + rectOptions.getPoints());
+                    total_distance +=
+                            2 * calcDistance(markers.get(i).getPosition(), markers.get(i + 1).getPosition());
+                }
+            }
+        }
 
+        rectOptions.getPoints().add(index, marker.getPosition());
+        Log.d(TAG, "rect after add: " + rectOptions.getPoints());
+        Polyline polyline = mMap.addPolyline(rectOptions);
+        polylines.add(polyline);
+
+        mTextView.setText("Length route: " + formatNumber(total_distance));
     }
 
     @Override
@@ -255,16 +331,21 @@ public class SearchActivity extends FragmentActivity implements
         marker.showInfoWindow();
         markers.add(marker);
 
-        for (int i = 0; i < markers.size() - 1; i++){
-            total_distance +=
-                    calcDistance(markers.get(i).getPosition(), markers.get(i + 1).getPosition());
+        // checks if the starting point marker is deleted or not
+        if (markers.size() == 1){
+            Toast.makeText(this, "You have chosen a new starting point!", Toast.LENGTH_SHORT).show();
+        }else {
+            for (int i = 0; i < markers.size(); i++){
+                if (marker == markers.get(i)){
+                    total_distance +=
+                            calcDistance(markers.get(i - 1).getPosition(), markers.get(i).getPosition());
+                }
+            }
         }
 
         if (markers.size() <= 2){
             rectOptions.add(latLng);
-        }
-
-        if (markers.size() > 2){
+        }else {
             total_distance -= calcDistance(markers.get(markers.size() - 1).getPosition(), myLocation);
             for(Polyline line : polylines) {
                 line.remove();
@@ -275,11 +356,11 @@ public class SearchActivity extends FragmentActivity implements
                 rectOptions.getPoints().remove(markers.size() - 1);
             }
             rectOptions.add(latLng);
-            rectOptions.getPoints().add(markers.size(), myLocation);
-
+            rectOptions.getPoints().add(markers.size(), markers.get(0).getPosition());
         }
 
-        total_distance +=  calcDistance(latLng, myLocation);
+        // add the distance between last marker and starting point
+        total_distance +=  calcDistance(latLng, markers.get(0).getPosition());
 
         Polyline polyline = mMap.addPolyline(rectOptions);
         polylines.add(polyline);
@@ -306,7 +387,7 @@ public class SearchActivity extends FragmentActivity implements
         }
 
         if (markers.size() > 2){
-            rectOptions.getPoints().add(markers.size(), myLocation);
+            rectOptions.getPoints().add(markers.size(), markers.get(0).getPosition());
         }
 
         Polyline polyline = mMap.addPolyline(rectOptions);
@@ -325,7 +406,6 @@ public class SearchActivity extends FragmentActivity implements
         return SphericalUtil.computeDistanceBetween(start, end);
     }
 
-
     private String formatNumber(double distance) {
         String unit = "m";
         if (distance > 1000) {
@@ -336,8 +416,20 @@ public class SearchActivity extends FragmentActivity implements
         return String.format("%4.0f%s", distance, unit);
     }
 
-    public void savegoal(View view) {
+    public void saveGoal(View view) {
         goal = mEditText.getText().toString();
+
         Toast.makeText(this, "Goal Saved!", Toast.LENGTH_SHORT).show();
+    }
+
+    public void saveRoute(View view) {
+        SharedPreferences.Editor SPEditor = SP.edit();
+        SPEditor.putString(rectOptions.getPoints().toString(), "pointsroute");
+        SPEditor.commit();
+
+        Toast.makeText(this, "Route Saved!", Toast.LENGTH_SHORT).show();
+
+        Intent gotoStart = new Intent(this, hhhhh.class);
+        startActivity(gotoStart);
     }
 }

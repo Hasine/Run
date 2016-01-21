@@ -162,18 +162,18 @@ public class FragmentTabs extends AppCompatActivity implements OnStreetViewPanor
         int id = item.getItemId();
 
         switch (id) {
-            case R.id.action_shuffle:
-                musicSrv.setShuffle();
-                break;
-            case R.id.action_end:
-                stopService(playIntent);
-                musicSrv = null;
-                System.exit(0);
-                break;
+//            case R.id.action_shuffle:
+//                musicSrv.setShuffle();
+//                break;
+//            case R.id.action_end:
+//                stopService(playIntent);
+//                musicSrv = null;
+//                System.exit(0);
+//                break;
             default:
                 return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
+//        return super.onOptionsItemSelected(item);
     }
 
 

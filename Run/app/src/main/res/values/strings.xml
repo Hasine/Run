@@ -1,18 +1,19 @@
 <resources>
     <string name="app_name">Love To Run</string>
-    <string name="action_settings">Music Settings</string>
-    <string name="start">START RUN</string>
-    <string name="search">SEARCH RUN</string>
     <string name="title_activity_start">Start Run</string>
     <string name="title_activity_search">Map</string>
-    <string name="title_activity_saved_route">Map</string>
-    <string name="title_activity_music_settings">MusicSettings</string>
+    <string name="title_activity_hhhhh">hhhhh</string>
+    <string name="title_activity_help">Do you need my help?</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="start">START RUN</string>
+    <string name="make">MAKE RUN</string>
+    <string name="action_settings">Music Settings</string>
     <string name="end">End</string>
     <string name="shuffle">Shuffle</string>
-    <string name="hintTextView">Length run</string>
+    <string name="hintTextView">Length route</string>
     <string name="goalButton">You can do it!</string>
     <string name="goalEditText">Enter goal in km</string>
+    <string name="helpButton">help</string>
+    <string name="saveRouteButton">Save Route!</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>

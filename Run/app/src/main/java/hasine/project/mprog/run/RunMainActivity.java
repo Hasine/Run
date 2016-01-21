@@ -22,8 +22,8 @@ public class RunMainActivity extends AppCompatActivity {
     }
 
 
-    public void search(View view) {
-        Intent gotoSearch = new Intent(this, SearchActivity.class);
+    public void make(View view) {
+        Intent gotoSearch = new Intent(this, MakeActivity.class);
         startActivity(gotoSearch);
     }
 
@@ -41,7 +41,14 @@ public class RunMainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.help:
+                Intent gotoHelp = new Intent(this, helpActivity.class);
+                startActivity(gotoHelp);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
-
 }
