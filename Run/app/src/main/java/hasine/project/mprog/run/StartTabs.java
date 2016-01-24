@@ -1,8 +1,8 @@
 package hasine.project.mprog.run;
 
 import android.content.SharedPreferences;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.preference.PreferenceManager;
+import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,9 +19,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.TextView;
-import android.widget.Toast;
 
-public class hhhhh extends AppCompatActivity {
+public class StartTabs extends AppCompatActivity {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -35,12 +35,17 @@ public class hhhhh extends AppCompatActivity {
     /**
      * The {@link ViewPager} that will host the section contents.
      */
+    TabLayout tabLayout;
     private ViewPager mViewPager;
+    private String pointsroute;
+    private String tabTitles[] = new String[] {"Start Run", "Saved Route", "Runned Routes" };
+    private int[] tabIcons = {R.drawable.running, R.drawable.gps_device, R.drawable.map_marker};
+    public static final String TAG = StartTabs.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_hhhhh);
+        setContentView(R.layout.activity_start_tabs);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -51,12 +56,26 @@ public class hhhhh extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+
+        tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+        tabLayout.setupWithViewPager(mViewPager);
+        setupTabIcons();
+
+        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        pointsroute = SP.getString("pointsroute", "Couldn't get points route");
+        Log.d(TAG, "pointsroute: " + pointsroute);
+    }
+
+    private void setupTabIcons() {
+        tabLayout.getTabAt(0).setIcon(tabIcons[0]);
+        tabLayout.getTabAt(1).setIcon(tabIcons[1]);
+        tabLayout.getTabAt(2).setIcon(tabIcons[2]);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_hhhhh, menu);
+        getMenuInflater().inflate(R.menu.menu_start_tabs, menu);
         return true;
     }
 
@@ -70,9 +89,6 @@ public class hhhhh extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
-        }
-        if(id==android.R.id.home){
-
         }
         return super.onOptionsItemSelected(item);
     }
@@ -108,7 +124,7 @@ public class hhhhh extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_hhhhh, container, false);
+            View rootView = inflater.inflate(R.layout.fragment_start_tabs, container, false);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
             return rootView;
@@ -140,15 +156,8 @@ public class hhhhh extends AppCompatActivity {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return "START RUN";
-                case 1:
-                    return "SAVED ROUTE";
-                case 2:
-                    return "RUNNED ROUTES";
-            }
-            return null;
+            // Generate title based on item position
+            return tabTitles[position];
         }
     }
 }

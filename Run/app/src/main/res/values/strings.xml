@@ -2,7 +2,7 @@
     <string name="app_name">Love To Run</string>
     <string name="title_activity_start">Start Run</string>
     <string name="title_activity_search">Map</string>
-    <string name="title_activity_hhhhh">hhhhh</string>
+    <string name="title_activity_start_tabs">Start Run</string>
     <string name="title_activity_help">Do you need my help?</string>
 
     <string name="start">START RUN</string>
@@ -16,4 +16,15 @@
     <string name="helpButton">help</string>
     <string name="saveRouteButton">Save Route!</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="helpTitle">How to search for a route?</string>
+    <string name="helpText"> The very first marker is already placed for you on the map
+        on your current location. This is the place where the route will start.
+        You can of course deleted this marker by clicking on it. And choose another starting point.
+        If there are some places which you want to see during your run, you can add a marker at that spot.
+        To make a good route, it is handy to place your markers mostly at intersection points
+        of the streets. You will see immediately the length of the route between the markers and
+        if you place more than 2 markers on the map, this app will automatically calculate the distance
+        back to your starting point and draw a line. It is also possible to drag your marker and put
+        it somewhere else on the map. Your route will be drawn in the order of the set markers.
+        If you still have some questions, contact me! Click on the info buttton for more contact info.</string>
 </resources>

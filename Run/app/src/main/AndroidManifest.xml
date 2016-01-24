@@ -62,8 +62,8 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".hhhhh"
-            android:label="@string/title_activity_hhhhh"
+            android:name=".StartTabs"
+            android:label="@string/title_activity_start_tabs"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".helpActivity"
