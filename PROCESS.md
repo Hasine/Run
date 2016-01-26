@@ -29,3 +29,10 @@ delete markers onclick en draw polylines toegevoegd in searchactivity en af en t
 aan streetview gezeten, heel lang met adapters en view geprutseld, zonder resultaat.
 ## dag 13
 searchactivity is done! gesloten routes, edittext voor goal geimplementeerd en lengte route wordt getoond
+## dag 14
+bezig geweest met streetview.
+## dag 15
+helpactivity aangemaakt, toch wat bugs in mn searchactivity die nu makeactivity heet.
+# Week 4
+## dag 16
+intents naar andere apps op mn tel aangemaakt, aan streetview gewerkt.
