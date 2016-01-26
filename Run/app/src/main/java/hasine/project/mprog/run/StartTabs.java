@@ -1,6 +1,8 @@
 package hasine.project.mprog.run;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -17,8 +19,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import hasine.project.mprog.run.SavedRoute;
+import hasine.project.mprog.run.StartFragment;
 
 public class StartTabs extends AppCompatActivity {
 
@@ -32,9 +39,6 @@ public class StartTabs extends AppCompatActivity {
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
     TabLayout tabLayout;
     private ViewPager mViewPager;
     private String pointsroute;
@@ -51,11 +55,12 @@ public class StartTabs extends AppCompatActivity {
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
+        setupViewPager(mViewPager);
+//        mViewPager.setAdapter(mSectionsPagerAdapter);
 
         tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(mViewPager);
@@ -64,6 +69,16 @@ public class StartTabs extends AppCompatActivity {
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         pointsroute = SP.getString("pointsroute", "Couldn't get points route");
         Log.d(TAG, "pointsroute: " + pointsroute);
+
+        PackageManager myPackageManager = getPackageManager();
+    }
+
+    private void setupViewPager(ViewPager mViewPager) {
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+//        mSectionsPagerAdapter.addFragment(new StartFragment(), "Start Run");
+//        mSectionsPagerAdapter.addFragment(new SavedRoute(), "Saved Route");
+//        mSectionsPagerAdapter.addFragment(new StartFragment(), "Runned Routes");
+        mViewPager.setAdapter(mSectionsPagerAdapter);
     }
 
     private void setupTabIcons() {
@@ -88,7 +103,9 @@ public class StartTabs extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            Intent gotoMusic = new Intent(Intent.ACTION_MAIN, null);
+            gotoMusic.addCategory(Intent.CATEGORY_APP_MUSIC);
+            startActivity(gotoMusic);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -136,6 +153,8 @@ public class StartTabs extends AppCompatActivity {
      * one of the sections/tabs/pages.
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -152,6 +171,11 @@ public class StartTabs extends AppCompatActivity {
         public int getCount() {
             // Show 3 total pages.
             return 3;
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
         }
 
         @Override

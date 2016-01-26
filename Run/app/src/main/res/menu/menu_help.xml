@@ -9,5 +9,21 @@
         android:orderInCategory="2"
         android:icon="@drawable/info"
         android:title="About"
-        app:showAsAction="always"/>
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/mail"
+                android:icon="@drawable/mail"
+                android:showAsAction="never"
+                android:title="Mail me: hasineefeturk@hotmail.com"
+                tools:ignore="AppCompatResource" />
+
+            <item
+                android:id="@+id/call"
+                android:icon="@drawable/call"
+                android:showAsAction="never"
+                android:title="Contact me: +31646103598"
+                tools:ignore="AppCompatResource" />
+        </menu>
+    </item>
 </menu>

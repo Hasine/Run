@@ -23,68 +23,74 @@ public class SavedRoute extends SupportStreetViewPanoramaFragment {
 
     public static final String ARG_PAGE = "ARG_PAGE";
     private int mPage;
+    private double lat_loc, long_loc;
+//    StreetViewPanoramaView SVPV;
     StreetViewPanoramaView SVPV;
-    StreetViewPanorama mPanorama;
     public static final String TAG = SavedRoute.class.getSimpleName();
-//    private OnFragmentInteractionListener mListener;
 
     public SavedRoute() {
         // Required empty public constructor
     }
 
-    public static SavedRoute newInstance(int page) {
-        Bundle args = new Bundle();
-        args.putInt(ARG_PAGE, page);
-        SavedRoute fragment = new SavedRoute();
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPage = getArguments().getInt(ARG_PAGE);
-    }
 
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                             Bundle savedInstanceState) {
-//        return inflater.inflate(R.layout.fragment_page, container, false);
-//    }
+        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getContext());
+        lat_loc = SP.getFloat("lat_loc", 0);
+        long_loc = SP.getFloat("long_loc", 1);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate( R.layout.fragment_saved_route, container, false );
+        View view = inflater.inflate(R.layout.fragment_saved_route, container, false);
 
         SVPV = (StreetViewPanoramaView) view.findViewById(R.id.street_view_panorama);
         SVPV.onCreate(savedInstanceState);
+        SVPV.getStreetViewPanoramaAsync(new OnStreetViewPanoramaReadyCallback() {
+            @Override
+            public void onStreetViewPanoramaReady(StreetViewPanorama streetViewPanorama) {
+                final LatLng myLoc = new LatLng(lat_loc, long_loc);
+                streetViewPanorama.setPosition(myLoc);
+            }
+        });
 
-
-        initStreetView();
+//        SVPV = (StreetViewPanoramaFragment) getActivity()
+//                .getFragmentManager().findFragmentById(R.id.streetviewpanorama);
+//        SVPV.getStreetViewPanoramaAsync(new OnStreetViewPanoramaReadyCallback() {
+//            @Override
+//            public void onStreetViewPanoramaReady(StreetViewPanorama streetViewPanorama) {
+//                final LatLng myLoc = new LatLng(lat_loc, long_loc);
+//                streetViewPanorama.setPosition(myLoc);
+//            }
+//        });
         return view;
     }
 
-    private void initStreetView() {
-        SVPV.getStreetViewPanoramaAsync(new OnStreetViewPanoramaReadyCallback() {
-            @Override
-            public void onStreetViewPanoramaReady(StreetViewPanorama panorama) {
-                mPanorama = panorama;
-                showStreetView(new LatLng(40.7506, -73.9936));
-            }
-        });
+    public final void onResume(){
+        super.onResume();
+        SVPV.onResume();
     }
 
-    private void showStreetView( LatLng latLng ) {
-        if( mPanorama == null )
-            return;
+    public final void onPause(){
+        super.onPause();
+        SVPV.onPause();
+    }
 
-        StreetViewPanoramaCamera.Builder builder = new StreetViewPanoramaCamera.Builder( mPanorama.getPanoramaCamera() );
-        builder.tilt( 0.0f );
-        builder.zoom( 0.0f );
-        builder.bearing( 0.0f );
-        mPanorama.animateTo( builder.build(), 0 );
-        mPanorama.setPosition( latLng, 300 );
-        mPanorama.setStreetNamesEnabled(true);
+    public final void onDestroy(){
+        super.onDestroy();
+        SVPV.onDestroy();
+    }
+
+    public final void onSaveInstanceState(Bundle outState){
+        super.onSaveInstanceState(outState);
+        SVPV.onSaveInstanceState(outState);
+    }
+
+    public final void onLowMemory(){
+        super.onLowMemory();
+        SVPV.onLowMemory();
     }
 }

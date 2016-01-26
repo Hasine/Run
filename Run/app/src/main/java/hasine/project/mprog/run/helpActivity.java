@@ -37,9 +37,14 @@ public class helpActivity extends AppCompatActivity {
             case android.R.id.home:
                 Intent gotoMain = new Intent(this, RunMainActivity.class);
                 startActivity(gotoMain);
-            case R.id.info:
-//                popup menu implementeren
-
+            case R.id.mail:
+                Intent gotoMail = new Intent(Intent.ACTION_MAIN, null);
+                gotoMail.addCategory(Intent.CATEGORY_APP_EMAIL);
+                startActivity(gotoMail);
+            case R.id.call:
+                Intent gotoCall = new Intent(Intent.ACTION_MAIN, null);
+                gotoCall.addCategory(Intent.CATEGORY_APP_CONTACTS);
+                startActivity(gotoCall);
         }
         return super.onOptionsItemSelected(item);
     }

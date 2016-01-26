@@ -72,7 +72,7 @@ public class MusicService extends Service implements
     public void onPrepared(MediaPlayer mp) {
         mp.start();
 
-        Intent notIntent = new Intent(this, FragmentTabs.class);
+        Intent notIntent = new Intent(this, StartTabs.class);
         notIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendInt = PendingIntent.getActivity(this, 0,
                 notIntent, PendingIntent.FLAG_UPDATE_CURRENT);

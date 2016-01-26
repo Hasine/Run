@@ -28,7 +28,7 @@ public class RunMainActivity extends AppCompatActivity {
     }
 
     public void start(View view) {
-        Intent gotoStart = new Intent(this, FragmentTabs.class);
+        Intent gotoStart = new Intent(this, StartTabs.class);
         startActivity(gotoStart);
     }
 

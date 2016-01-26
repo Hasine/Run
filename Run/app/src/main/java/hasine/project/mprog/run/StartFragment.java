@@ -11,22 +11,13 @@ import android.support.v4.app.Fragment;
 
 // In this case, the fragment displays simple text based on the page
 public class StartFragment extends Fragment {
-    public static final String ARG_PAGE = "ARG_PAGE";
-    public static final String TAG = StartFragment.class.getSimpleName();
-    private int mPage;
 
-    public static StartFragment newInstance(int page) {
-        Bundle args = new Bundle();
-        args.putInt(ARG_PAGE, page);
-        StartFragment fragment = new StartFragment();
-        fragment.setArguments(args);
-        return fragment;
+    public StartFragment () {
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPage = getArguments().getInt(ARG_PAGE);
     }
 
     @Override
@@ -34,7 +25,7 @@ public class StartFragment extends Fragment {
                              Bundle savedInstanceState) {
             View view = inflater.inflate(R.layout.fragment_page, container, false);
             TextView textView = (TextView) view;
-            textView.setText("Fragment #" + mPage);
+            textView.setText("Fragment STARTFRAGMENNTTTT");
             return view;
     }
 }
