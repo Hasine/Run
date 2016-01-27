@@ -38,8 +38,8 @@ public class StartRunActivity extends AppCompatActivity implements OnStreetViewP
 
     TabLayout tabLayout;
     private ViewPager mViewPager;
-    private String pointsroute;
     private double lat_loc, long_loc;
+    private String locations;
     private LatLng myLoc;
     private static String goal;
     private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -79,10 +79,13 @@ public class StartRunActivity extends AppCompatActivity implements OnStreetViewP
         setupTabIcons();
 
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        pointsroute = SP.getString("pointsroute", "Couldn't get points route");
         lat_loc = SP.getFloat("lat_loc", 0);
         long_loc = SP.getFloat("long_loc", 1);
         goal = SP.getString("goal", "goal not found");
+
+        Intent gotoStart = getIntent();
+        locations = gotoStart.getStringExtra("locations");
+        Log.d(TAG, "locations in startrun: " +locations);
     }
 
     private void setupTabIcons() {

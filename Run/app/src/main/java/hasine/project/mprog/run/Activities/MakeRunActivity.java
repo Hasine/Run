@@ -57,6 +57,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -394,11 +398,28 @@ public class MakeRunActivity extends FragmentActivity implements
     }
 
     public void saveRoute(View view) {
-        Log.d(TAG, "pointsroute to string: " + rectOptions.getPoints().toString());
         Toast.makeText(this, R.string.routeSavedToast, Toast.LENGTH_SHORT).show();
 
+        // To convert locationsdata to jsonarray
+        JSONObject locationsObj = new JSONObject();
+        JSONArray locationsArray = new JSONArray();
+
+        try {
+            for (int i = 0; i < rectOptions.getPoints().size(); i++) {
+                JSONObject contact = new JSONObject();
+                contact.put("location", rectOptions.getPoints().get(i));
+                locationsArray.put(i, contact);
+            }
+
+            locationsObj.put("locations", locationsArray);
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        String jsonStr = locationsObj.toString();
 
         Intent gotoStart = new Intent(this, StartRunActivity.class);
+        gotoStart.putExtra("locations", jsonStr);
         startActivityForResult(gotoStart, 0);
     }
 }

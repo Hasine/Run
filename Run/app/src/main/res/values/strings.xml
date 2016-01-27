@@ -36,4 +36,5 @@
     <string name="goalTextView">Your goal is:</string>
     <string name="currRunDistTextView">Current runned distance:</string>
     <string name="goalSetText">%s km</string>
+    <string name="svnotfound">StreetView is not available for this location</string>
 </resources>

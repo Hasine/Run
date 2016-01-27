@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.OnStreetViewPanoramaReadyCallback;
@@ -66,7 +67,7 @@ public class SecondTab extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_second_tab, container, false);
+        final View view = inflater.inflate(R.layout.fragment_second_tab, container, false);
         SVPV = (StreetViewPanoramaView) view.findViewById(R.id.svpv);
         SVPV.onCreate(savedInstanceState);
         SVPV.getStreetViewPanoramaAsync(new OnStreetViewPanoramaReadyCallback() {
@@ -80,13 +81,13 @@ public class SecondTab extends Fragment {
                     public void onStreetViewPanoramaChange(StreetViewPanoramaLocation myLoc) {
                         if (myLoc != null && myLoc.links != null) {
                             // location is present
-                            Log.d(TAG,"inside if in onstreetviewchange");
                             panorama.setPosition(String.valueOf(myLoc));
                         } else {
                             // location not available
-                            Log.d(TAG,"inside else");
                             Toast.makeText(getContext(), "StreetView on this location is not available",
                                     Toast.LENGTH_LONG).show();
+                            TextView textView = (TextView) view.findViewById(R.id.svnotfound);
+                            textView.setText("@string/svnotfound");
                         }
                     }
                 });
