@@ -36,3 +36,7 @@ helpactivity aangemaakt, toch wat bugs in mn searchactivity die nu makeactivity 
 # Week 4
 ## dag 16
 intents naar andere apps op mn tel aangemaakt, aan streetview gewerkt.
+## dag 17
+alle fragments voor de tablayout aangemaakt
+## dag 18
+code opgeschoond, muziekpeler controls geïmplementeerd, custom buttons aangemaakt
