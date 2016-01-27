@@ -15,14 +15,14 @@
                 android:id="@+id/mail"
                 android:icon="@drawable/mail"
                 android:showAsAction="never"
-                android:title="Mail me: hasineefeturk@hotmail.com"
+                android:title="Mail me!"
                 tools:ignore="AppCompatResource" />
 
             <item
                 android:id="@+id/call"
                 android:icon="@drawable/call"
                 android:showAsAction="never"
-                android:title="Contact me: +31646103598"
+                android:title="Contact me!"
                 tools:ignore="AppCompatResource" />
         </menu>
     </item>

@@ -1,7 +1,11 @@
-package hasine.project.mprog.run;
-
+package hasine.project.mprog.run.Tools;
 
 /*
+ * Hasine Efetürk
+ * 10173536
+ * hasineefeturk@hotmail.com
+ *
+ *
  * Copyright 2013 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,6 +24,8 @@ package hasine.project.mprog.run;
 
 import com.google.android.gms.maps.model.LatLng;
 import java.util.List;
+import hasine.project.mprog.run.Tools.MathUtil;
+
 import static java.lang.Math.*;
 
 public class SphericalUtil {

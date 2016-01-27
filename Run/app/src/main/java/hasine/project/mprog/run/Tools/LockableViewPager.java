@@ -1,5 +1,12 @@
-package hasine.project.mprog.run;
+package hasine.project.mprog.run.Tools;
 
+/*
+ * Hasine Efetürk
+ * 10173536
+ * hasineefeturk@hotmail.com
+ *
+ * This pager allows the tab layout to be swipeable or not.
+ */
 import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;

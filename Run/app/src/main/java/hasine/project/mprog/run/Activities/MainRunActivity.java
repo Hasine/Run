@@ -1,34 +1,40 @@
-package hasine.project.mprog.run;
+package hasine.project.mprog.run.Activities;
+
+/**
+ * Hasine Efetürk
+ * 10173536
+ * hasineefeturk@hotmail.com
+ *
+ */
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class RunMainActivity extends AppCompatActivity {
+import hasine.project.mprog.run.R;
+
+public class MainRunActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_run_main);
+        setContentView(R.layout.activity_main_run);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
     }
 
 
     public void make(View view) {
-        Intent gotoSearch = new Intent(this, MakeActivity.class);
+        Intent gotoSearch = new Intent(this, MakeRunActivity.class);
         startActivity(gotoSearch);
     }
 
     public void start(View view) {
-        Intent gotoStart = new Intent(this, StartTabs.class);
+        Intent gotoStart = new Intent(this, StartRunActivity.class);
         startActivity(gotoStart);
     }
 
@@ -44,7 +50,7 @@ public class RunMainActivity extends AppCompatActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.help:
-                Intent gotoHelp = new Intent(this, helpActivity.class);
+                Intent gotoHelp = new Intent(this, HelpActivity.class);
                 startActivity(gotoHelp);
                 return true;
             default:

@@ -16,6 +16,8 @@ import android.util.Log;
 import android.app.Notification;
 import android.app.PendingIntent;
 
+import hasine.project.mprog.run.Activities.StartRunActivity;
+
 public class MusicService extends Service implements
         MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener,
         MediaPlayer.OnCompletionListener {
@@ -72,7 +74,7 @@ public class MusicService extends Service implements
     public void onPrepared(MediaPlayer mp) {
         mp.start();
 
-        Intent notIntent = new Intent(this, StartTabs.class);
+        Intent notIntent = new Intent(this, StartRunActivity.class);
         notIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendInt = PendingIntent.getActivity(this, 0,
                 notIntent, PendingIntent.FLAG_UPDATE_CURRENT);

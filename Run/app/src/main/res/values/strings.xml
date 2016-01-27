@@ -15,16 +15,25 @@
     <string name="goalEditText">Enter goal in km</string>
     <string name="helpButton">help</string>
     <string name="saveRouteButton">Save Route!</string>
-    <string name="section_format">Hello World from section: %1$d</string>
-    <string name="helpTitle">How to search for a route?</string>
+    <string name="helpTitle">How to make a good route?</string>
     <string name="helpText"> The very first marker is already placed for you on the map
         on your current location. This is the place where the route will start.
-        You can of course deleted this marker by clicking on it. And choose another starting point.
-        If there are some places which you want to see during your run, you can add a marker at that spot.
-        To make a good route, it is handy to place your markers mostly at intersection points
-        of the streets. You will see immediately the length of the route between the markers and
-        if you place more than 2 markers on the map, this app will automatically calculate the distance
-        back to your starting point and draw a line. It is also possible to drag your marker and put
-        it somewhere else on the map. Your route will be drawn in the order of the set markers.
-        If you still have some questions, contact me! Click on the info buttton for more contact info.</string>
+        You can of course delete this marker by clicking on it. And choose another starting point.</string>
+    <string name="helpText2"> If there are some places which you want to see during your run,
+        you can add a marker at that spot. To make a good route, it is handy to place your markers
+        mostly at intersection points of the streets. You will see immediately the length of the
+        route between the markers and this app will automatically calculate the distance back to your
+        starting point and draw a line. It is also possible to drag your marker and put it somewhere
+        else on the map. Your route will be drawn in the order of the set markers.
+        Do not forget to enter your goal to see this while you are running. </string>
+    <string name="helpText3"> If you still have some questions, contact me!
+        Click on the info button for more contact info.</string>
+
+    <string name="saveGoalToast">Goal Saved!</string>
+    <string name="routeSavedToast">Route Saved!</string>
+    <string name="lengthRouteTextView">Length route: %s</string>
+    <string name="calcRouteTextView">Calculating route!</string>
+    <string name="goalTextView">Your goal is:</string>
+    <string name="currRunDistTextView">Current runned distance:</string>
+    <string name="goalSetText">%s km</string>
 </resources>

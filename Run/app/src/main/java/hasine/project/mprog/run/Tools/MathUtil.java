@@ -1,6 +1,11 @@
-package hasine.project.mprog.run;
+package hasine.project.mprog.run.Tools;
 
 /*
+ * Hasine Efetürk
+ * 10173536
+ * hasineefeturk@hotmail.com
+ *
+ *
  * Copyright 2013 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");

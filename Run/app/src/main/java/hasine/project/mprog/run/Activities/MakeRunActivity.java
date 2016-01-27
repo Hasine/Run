@@ -1,19 +1,29 @@
-package hasine.project.mprog.run;
+package hasine.project.mprog.run.Activities;
 
-// inspired by http://blog.teamtreehouse.com/beginners-guide-location-android
-//Copyright 2013 Google Inc.
-//
-//        Licensed under the Apache License, Version 2.0 (the "License");
-//        you may not use this file except in compliance with the License.
-//        You may obtain a copy of the License at
-//
-//        http://www.apache.org/licenses/LICENSE-2.0
-//
-//        Unless required by applicable law or agreed to in writing, software
-//        distributed under the License is distributed on an "AS IS" BASIS,
-//        WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//        See the License for the specific language governing permissions and
-//        limitations under the License.
+/**
+ * Hasine Efetürk
+ * 10173536
+ * hasineefeturk@hotmail.com
+ *
+ * inspired by http://blog.teamtreehouse.com/beginners-guide-location-android
+ *
+ * Copyright 2013 Google Inc.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+
+ *
+ */
+
 
 import android.Manifest;
 import android.content.Intent;
@@ -50,7 +60,11 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MakeActivity extends FragmentActivity implements
+import hasine.project.mprog.run.R;
+import hasine.project.mprog.run.Tools.SphericalUtil;
+
+
+public class MakeRunActivity extends FragmentActivity implements
         OnMapReadyCallback,
         GoogleMap.OnMarkerDragListener,
         GoogleMap.OnMapLongClickListener,
@@ -61,7 +75,6 @@ public class MakeActivity extends FragmentActivity implements
     private GoogleMap mMap;
     private GoogleApiClient client;
     private LocationRequest mLocationRequest;
-    private LatLng myLocation;
     private PolylineOptions rectOptions;
     private double lat_loc, long_loc;
     private String goal;
@@ -72,13 +85,13 @@ public class MakeActivity extends FragmentActivity implements
     List<Polyline> polylines = new ArrayList<>();
     private ArrayList<Marker> markers = new ArrayList<>();
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
-    public static final String TAG = MakeActivity.class.getSimpleName();
+    public static final String TAG = MakeRunActivity.class.getSimpleName();
     private double total_distance = 0, close_circuit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_make);
+        setContentView(R.layout.activity_make_run);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -93,8 +106,8 @@ public class MakeActivity extends FragmentActivity implements
         // Create the LocationRequest object
         mLocationRequest = LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setInterval(10 * 1000)        // 10 seconds, in milliseconds
-                .setFastestInterval(1 * 1000); // 1 second, in milliseconds
+                .setInterval(10000)        // 10 seconds, in milliseconds
+                .setFastestInterval(1000); // 1 second, in milliseconds
 
         SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         mTextView = (TextView) findViewById(R.id.textView);
@@ -121,7 +134,7 @@ public class MakeActivity extends FragmentActivity implements
         SPEditor.putFloat("lat_loc", (float) lat_loc);
         SPEditor.putFloat("long_loc", (float) long_loc);
         SPEditor.putString("goal", goal);
-        SPEditor.commit();
+        SPEditor.apply();
 
 
         if (client.isConnected()) {
@@ -132,8 +145,9 @@ public class MakeActivity extends FragmentActivity implements
 
     public void onConnected(Bundle bundle) {
         Log.i(TAG, "Location services connected.");
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
             //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
@@ -147,19 +161,18 @@ public class MakeActivity extends FragmentActivity implements
             Log.i(TAG, "Location is null.");
             LocationServices.FusedLocationApi.requestLocationUpdates(client, mLocationRequest, this);
         }
-        else {
-            handleNewLocation(location);
-        };
+
+        handleNewLocation(location);
+
     }
 
     private void handleNewLocation(Location location) {
         Log.d(TAG, location.toString());
-        myLocation = new LatLng(location.getLatitude(), location.getLongitude());
+        LatLng myLocation = new LatLng(location.getLatitude(), location.getLongitude());
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 16));
 
         lat_loc = location.getLatitude();
         long_loc = location.getLongitude();
-        Log.i(TAG, "Now in handleNewLocation");
 
         Marker marker = mMap.addMarker(new MarkerOptions()
                 .position(myLocation)
@@ -177,7 +190,6 @@ public class MakeActivity extends FragmentActivity implements
     @Override
     public void onLocationChanged(Location location) {
         handleNewLocation(location);
-        Log.i(TAG, "Now in onLocationChanged");
     }
 
     @Override
@@ -210,8 +222,9 @@ public class MakeActivity extends FragmentActivity implements
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
             //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
@@ -243,12 +256,12 @@ public class MakeActivity extends FragmentActivity implements
         }
         polylines.clear();
 
-        mTextView.setText("Calculating route!");
+        mTextView.setText(R.string.calcRouteTextView);
     }
 
     @Override
     public void onMarkerDrag(Marker marker) {
-        mTextView.setText("Calculating route!");
+        mTextView.setText(R.string.calcRouteTextView);
     }
 
     @Override
@@ -259,7 +272,8 @@ public class MakeActivity extends FragmentActivity implements
             rectOptions.add(marker.getPosition());
         }
 
-        close_circuit = calcDistance(rectOptions.getPoints().get(markers.size() - 1), markers.get(0).getPosition());
+        close_circuit = calcDistance(rectOptions.getPoints().get(markers.size() - 1), markers.get(0)
+                .getPosition());
         total_distance = 0;
         for (int i = 0; i < markers.size(); i++){
             total_distance +=
@@ -269,7 +283,7 @@ public class MakeActivity extends FragmentActivity implements
         Polyline polyline = mMap.addPolyline(rectOptions);
         polylines.add(polyline);
 
-        mTextView.setText("Length route: " + formatNumber(total_distance));
+        mTextView.setText(getString(R.string.lengthRouteTextView, formatNumber(total_distance)));
     }
 
     @Override
@@ -303,7 +317,8 @@ public class MakeActivity extends FragmentActivity implements
         // calculate distance between new set marker and previous one
         for (int i = 0; i < markers.size(); i++){
             if (marker == markers.get(i) && markers.size() > 1){
-                total_distance += calcDistance(markers.get(i - 1).getPosition(), markers.get(i).getPosition());
+                total_distance += calcDistance(markers.get(i - 1).getPosition(), markers.get(i)
+                        .getPosition());
                 rectOptions.getPoints().remove(markers.size() - 1);
                 rectOptions.add(latLng);
                 rectOptions.getPoints().add(markers.get(0).getPosition());
@@ -318,7 +333,7 @@ public class MakeActivity extends FragmentActivity implements
         Polyline polyline = mMap.addPolyline(rectOptions);
         polylines.add(polyline);
 
-        mTextView.setText("Length route: " + formatNumber(total_distance));
+        mTextView.setText(getString(R.string.lengthRouteTextView, formatNumber(total_distance)));
     }
 
     @Override
@@ -341,7 +356,8 @@ public class MakeActivity extends FragmentActivity implements
 
         if (markers.size() != 0){
             rectOptions.add(markers.get(0).getPosition());
-            close_circuit = calcDistance(rectOptions.getPoints().get(markers.size() - 1), markers.get(0).getPosition());
+            close_circuit = calcDistance(rectOptions.getPoints().get(markers.size() - 1),
+                    markers.get(0).getPosition());
         }
 
         Polyline polyline = mMap.addPolyline(rectOptions);
@@ -353,7 +369,7 @@ public class MakeActivity extends FragmentActivity implements
                     calcDistance(rectOptions.getPoints().get(i), rectOptions.getPoints().get(i + 1));
         }
 
-        mTextView.setText("Length route: " + formatNumber(total_distance));
+        mTextView.setText(getString(R.string.lengthRouteTextView, formatNumber(total_distance)));
         return false;
     }
 
@@ -374,15 +390,15 @@ public class MakeActivity extends FragmentActivity implements
     public void saveGoal(View view) {
         goal = mEditText.getText().toString();
 
-        Toast.makeText(this, "Goal Saved!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.saveGoalToast, Toast.LENGTH_SHORT).show();
     }
 
     public void saveRoute(View view) {
         Log.d(TAG, "pointsroute to string: " + rectOptions.getPoints().toString());
+        Toast.makeText(this, R.string.routeSavedToast, Toast.LENGTH_SHORT).show();
 
-        Toast.makeText(this, "Route Saved!", Toast.LENGTH_SHORT).show();
 
-        Intent gotoStart = new Intent(this, StartTabs.class);
+        Intent gotoStart = new Intent(this, StartRunActivity.class);
         startActivityForResult(gotoStart, 0);
     }
 }
