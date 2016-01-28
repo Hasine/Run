@@ -55,6 +55,7 @@
         <activity
             android:name=".Activities.StartRunActivity"
             android:label="@string/title_activity_start_tabs"
+            android:configChanges="keyboardHidden|orientation"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activities.HelpActivity"

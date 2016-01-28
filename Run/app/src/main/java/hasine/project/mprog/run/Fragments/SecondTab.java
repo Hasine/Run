@@ -23,6 +23,7 @@ import com.google.android.gms.maps.OnStreetViewPanoramaReadyCallback;
 import com.google.android.gms.maps.StreetViewPanorama;
 import com.google.android.gms.maps.StreetViewPanoramaView;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.StreetViewPanoramaLocation;
 
 import hasine.project.mprog.run.R;
@@ -75,6 +76,7 @@ public class SecondTab extends Fragment {
             public void onStreetViewPanoramaReady(final StreetViewPanorama panorama) {
                 final LatLng myLoc = new LatLng(lat_loc, long_loc);
                 panorama.setPosition(myLoc);
+                panorama.isUserNavigationEnabled();
                 panorama.setOnStreetViewPanoramaChangeListener(new StreetViewPanorama
                         .OnStreetViewPanoramaChangeListener() {
                     @Override
@@ -93,6 +95,7 @@ public class SecondTab extends Fragment {
                 });
             }
         });
+
         return view;
     }
 
