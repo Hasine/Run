@@ -1,4 +1,4 @@
-package hasine.project.mprog.run;
+package hasine.project.mprog.run.Tools;
 
 /**
  * Hasine Efetürk

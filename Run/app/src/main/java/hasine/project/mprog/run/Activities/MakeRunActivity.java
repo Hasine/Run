@@ -313,6 +313,8 @@ public class MakeRunActivity extends FragmentActivity implements
             Toast.makeText(this, "You have chosen a new starting point!", Toast.LENGTH_SHORT).show();
             rectOptions.add(latLng);
             rectOptions.add(latLng);
+            lat_loc = marker.getPosition().latitude;
+            long_loc = marker.getPosition().longitude;
             total_distance = 0;
             close_circuit = 0;
         }
@@ -418,8 +420,11 @@ public class MakeRunActivity extends FragmentActivity implements
         }
         String jsonStr = locationsObj.toString();
 
+        SharedPreferences.Editor SPEditor = SP.edit();
+        SPEditor.putString("locations", jsonStr);
+        SPEditor.apply();
+
         Intent gotoStart = new Intent(this, StartRunActivity.class);
-        gotoStart.putExtra("locations", jsonStr);
         startActivityForResult(gotoStart, 0);
     }
 }

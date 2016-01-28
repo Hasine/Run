@@ -19,17 +19,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.google.android.gms.maps.OnStreetViewPanoramaReadyCallback;
-import com.google.android.gms.maps.StreetViewPanorama;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.StreetViewPanoramaCamera;
-
 import hasine.project.mprog.run.Fragments.FirstTab;
-import hasine.project.mprog.run.Tools.LockableViewPager;
 import hasine.project.mprog.run.R;
 import hasine.project.mprog.run.Fragments.SecondTab;
 import hasine.project.mprog.run.Fragments.ThirdTab;
@@ -38,9 +31,6 @@ public class StartRunActivity extends AppCompatActivity {
 
     TabLayout tabLayout;
     private ViewPager mViewPager;
-    private double lat_loc, long_loc;
-    private String locations;
-    private LatLng myLoc;
     private static String goal;
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private String tabTitles[] = new String[] {"Start Run", "Saved Route", "Runned Routes" };
@@ -72,20 +62,12 @@ public class StartRunActivity extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        LockableViewPager.setSwipeable(true);
-
         tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(mViewPager);
         setupTabIcons();
 
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        lat_loc = SP.getFloat("lat_loc", 0);
-        long_loc = SP.getFloat("long_loc", 1);
         goal = SP.getString("goal", "goal not found");
-
-        Intent gotoStart = getIntent();
-        locations = gotoStart.getStringExtra("locations");
-        Log.d(TAG, "locations in startrun: " +locations);
     }
 
     private void setupTabIcons() {
@@ -128,7 +110,6 @@ public class StartRunActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
 
 
     /**
