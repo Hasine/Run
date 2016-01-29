@@ -13,19 +13,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-
-import hasine.project.mprog.run.Tools.GPSTracker;
 import hasine.project.mprog.run.R;
 
 
 public class ThirdTab extends Fragment {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
-
-    // GPSTracker class
-    GPSTracker gps;
-
 
     public ThirdTab() {
         // Required empty public constructor
@@ -42,17 +35,16 @@ public class ThirdTab extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_third_tab, container, false);
-        TextView textView = (TextView) view.findViewById(R.id.textt);
-        textView.setText("THIRDDTABB");
-        return view;
+        return inflater.inflate(R.layout.fragment_third_tab, container, false);
     }
 }
+
+
+
 

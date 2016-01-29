@@ -8,8 +8,6 @@ package hasine.project.mprog.run.Activities;
  * This activity contains the tabs, sets the adapter and the music controllers.
  */
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -30,21 +28,8 @@ import hasine.project.mprog.run.Fragments.ThirdTab;
 public class StartRunActivity extends AppCompatActivity {
 
     TabLayout tabLayout;
-    private ViewPager mViewPager;
-    private static String goal;
-    private SectionsPagerAdapter mSectionsPagerAdapter;
     private String tabTitles[] = new String[] {"Start Run", "Saved Route", "Runned Routes" };
     private int[] tabIcons = {R.drawable.running, R.drawable.gps_device, R.drawable.map_marker};
-    public static String POSITION = "POSITION";
-    public static final String TAG = StartRunActivity.class.getSimpleName();
-
-//    /**
-//     * Music controllers
-//     */
-//    private MusicController controller;
-//    private MusicService musicSrv;
-//    private Intent playIntent;
-//    private boolean musicBound=false, paused=false, playbackPaused=false;
 
 
     @Override
@@ -56,36 +41,21 @@ public class StartRunActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        ViewPager mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(mViewPager);
         setupTabIcons();
-
-        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        goal = SP.getString("goal", "goal not found");
     }
 
     private void setupTabIcons() {
         tabLayout.getTabAt(0).setIcon(tabIcons[0]);
         tabLayout.getTabAt(1).setIcon(tabIcons[1]);
         tabLayout.getTabAt(2).setIcon(tabIcons[2]);
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt(POSITION, tabLayout.getSelectedTabPosition());
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        mViewPager.setCurrentItem(savedInstanceState.getInt(POSITION));
     }
 
     @Override

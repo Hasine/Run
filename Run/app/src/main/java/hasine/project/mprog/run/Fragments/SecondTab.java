@@ -8,7 +8,7 @@ package hasine.project.mprog.run.Fragments;
  * Instantiate the second tab with the StreetViewPanoramaView.
  */
 
-import android.content.Intent;
+
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -17,18 +17,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.OnStreetViewPanoramaReadyCallback;
 import com.google.android.gms.maps.StreetViewPanorama;
 import com.google.android.gms.maps.StreetViewPanoramaView;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.StreetViewPanoramaLocation;
 
-import hasine.project.mprog.run.Activities.StartRunActivity;
 import hasine.project.mprog.run.R;
 
 /**
@@ -42,7 +38,6 @@ public class SecondTab extends Fragment {
     StreetViewPanoramaView SVPV;
     private double lat_loc, long_loc;
     private String locations;
-    private Button btn_NextMarker;
     private static final String ARG_SECTION_NUMBER = "section_number";
     public static final String TAG = SecondTab.class.getSimpleName();
 

@@ -88,6 +88,7 @@ public class MakeRunActivity extends FragmentActivity implements
     private int index;
     List<Polyline> polylines = new ArrayList<>();
     private ArrayList<Marker> markers = new ArrayList<>();
+    private ArrayList<LatLng> locations = new ArrayList<>();
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     public static final String TAG = MakeRunActivity.class.getSimpleName();
     private double total_distance = 0, close_circuit;
@@ -185,8 +186,8 @@ public class MakeRunActivity extends FragmentActivity implements
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
         marker.showInfoWindow();
         markers.add(marker);
-        // Instantiates a new Polyline object and adds points to define a rectangle
 
+        // To make a circuit, I insert at first twice my location
         rectOptions.add(myLocation);
         rectOptions.add(myLocation);
     }
@@ -408,9 +409,8 @@ public class MakeRunActivity extends FragmentActivity implements
 
         try {
             for (int i = 0; i < rectOptions.getPoints().size(); i++) {
-                JSONObject contact = new JSONObject();
-                contact.put("location", rectOptions.getPoints().get(i));
-                locationsArray.put(i, contact);
+                locationsObj.put("location", rectOptions.getPoints().get(i));
+                locationsArray.put(i, locationsObj);
             }
 
             locationsObj.put("locations", locationsArray);
@@ -426,5 +426,32 @@ public class MakeRunActivity extends FragmentActivity implements
 
         Intent gotoStart = new Intent(this, StartRunActivity.class);
         startActivityForResult(gotoStart, 0);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(goal, String.valueOf(mEditText.getText()));
+        for (int i = 0; i < rectOptions.getPoints().size(); i++){
+            locations.add(rectOptions.getPoints().get(i));
+        }
+        outState.putParcelableArrayList("locations", locations);
+        outState.putDouble("total_distance", total_distance);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mEditText.setText(goal);
+
+        rectOptions = new PolylineOptions();
+        for (int i = 0; i < locations.size(); i++){
+            rectOptions.add(locations.get(i));
+        }
+
+//        Polyline polyline = mMap.addPolyline(rectOptions);
+//        polylines.add(polyline);
+
+        mTextView.setText(getString(R.string.lengthRouteTextView, formatNumber(total_distance)));
     }
 }

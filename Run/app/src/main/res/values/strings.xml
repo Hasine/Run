@@ -5,16 +5,22 @@
     <string name="title_activity_start_tabs">Start Run</string>
     <string name="title_activity_help">Do you need my help?</string>
 
+    <!-- main activity strings-->
     <string name="start">START RUN</string>
     <string name="make">MAKE RUN</string>
-    <string name="action_settings">Music Settings</string>
-    <string name="end">End</string>
-    <string name="shuffle">Shuffle</string>
+
+    <!-- make activity strings-->
     <string name="hintTextView">Length route</string>
-    <string name="goalButton">You can do it!</string>
+    <string name="goalButton">Save Goal!</string>
     <string name="goalEditText">Enter goal in km</string>
-    <string name="helpButton">help</string>
     <string name="saveRouteButton">Save Route!</string>
+    <string name="saveGoalToast">Goal Saved!</string>
+    <string name="routeSavedToast">Route Saved!</string>
+    <string name="lengthRouteTextView">Length route: %s</string>
+    <string name="calcRouteTextView">Calculating route!</string>
+
+    <!-- help activity strings-->
+    <string name="helpButton">help</string>
     <string name="helpTitle">How to make a good route?</string>
     <string name="helpText"> The very first marker is already placed for you on the map
         on your current location. This is the place where the route will start.
@@ -29,12 +35,19 @@
     <string name="helpText3"> If you still have some questions, contact me!
         Click on the info button for more contact info.</string>
 
-    <string name="saveGoalToast">Goal Saved!</string>
-    <string name="routeSavedToast">Route Saved!</string>
-    <string name="lengthRouteTextView">Length route: %s</string>
-    <string name="calcRouteTextView">Calculating route!</string>
+    <!-- first tab strings-->
+    <string name="action_settings">Go to musicplayer</string>
     <string name="goalTextView">Your goal is:</string>
     <string name="currRunDistTextView">Runned distance:</string>
     <string name="goalSetText">%s km</string>
     <string name="svnotfound">StreetView is not available for this location</string>
+    <string name="btnNext">btnNext</string>
+    <string name="btnStop">btnStop</string>
+    <string name="btnPlay">btnPlay</string>
+    <string name="btnBack">btnBack</string>
+    <string name="btnShuffle">btnShuffle</string>
+    <string name="totalDurText">total</string>
+    <string name="currDurText">0:00</string>
+    <string name="songTitleText">SongTitle</string>
+    <string name="currDistTextFirst">0 km</string>
 </resources>

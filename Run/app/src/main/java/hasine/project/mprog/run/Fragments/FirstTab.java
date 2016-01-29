@@ -40,20 +40,20 @@ public class FirstTab extends Fragment implements MediaPlayer.OnCompletionListen
 
     private static String goal;
     private static final String ARG_SECTION_NUMBER = "section_number";
-    private ImageButton btnPlay, btnNext, btnBack, btnStop, btnShuffle;
+    private ImageButton btnPlay, btnShuffle;
+    private boolean isShuffle = false;
     private TextView songTitleLabel, songCurrentDurationLabel, songTotalDurationLabel;
+
+    ContentResolver cr;
     private  MediaPlayer mp;
     // Handler to update UI timer, progress bar etc,.
-    private Handler mHandler = new Handler();;
+    private Handler mHandler = new Handler();
     private SongsManager songManager;
     private Utilities utils;
     private int currentSongIndex = 0;
-    private boolean isShuffle = false;
-    private Random rand;
     private List<SongsManager.Item> songsList = new ArrayList<>();
-    public static final String TAG = FirstTab.class.getSimpleName();
-    ContentResolver cr;
 
+    public static final String TAG = FirstTab.class.getSimpleName();
 
     // GPSTracker class
     GPSTracker gps;
@@ -76,7 +76,7 @@ public class FirstTab extends Fragment implements MediaPlayer.OnCompletionListen
         super.onCreate(savedInstanceState);
 
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getContext());
-        goal = SP.getString("goal", "goal not found");
+        goal = SP.getString("goal", "0");
 
         // Mediaplayer
         mp = new MediaPlayer();
@@ -98,15 +98,15 @@ public class FirstTab extends Fragment implements MediaPlayer.OnCompletionListen
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_first_tab, container, false);
         TextView textView = (TextView) view.findViewById(R.id.currDist);
-        textView.setText(String.valueOf(getArguments().getInt(ARG_SECTION_NUMBER)));
+        textView.setText(R.string.currDistTextFirst);
         TextView textView2 = (TextView) view.findViewById(R.id.goal);
         textView2.setText(this.getString(R.string.goalSetText, goal));
 
         // All player buttons
+        ImageButton btnNext = (ImageButton) view.findViewById(R.id.btnNext);
+        ImageButton btnBack = (ImageButton) view.findViewById(R.id.btnBack);
+        ImageButton btnStop = (ImageButton) view.findViewById(R.id.btnStop);
         btnPlay = (ImageButton) view.findViewById(R.id.btnPlay);
-        btnNext = (ImageButton) view.findViewById(R.id.btnNext);
-        btnBack = (ImageButton) view.findViewById(R.id.btnBack);
-        btnStop = (ImageButton) view.findViewById(R.id.btnStop);
         btnShuffle = (ImageButton) view.findViewById(R.id.btnShuffle);
         songTitleLabel = (TextView) view.findViewById(R.id.songTitle);
         songCurrentDurationLabel = (TextView) view.findViewById(R.id.songCurrentDurationLabel);
@@ -119,7 +119,7 @@ public class FirstTab extends Fragment implements MediaPlayer.OnCompletionListen
                 if (mp.isPlaying()){
                     mp.pause();
                     // Changing Button Image to pause image
-                    btnPlay.setImageResource(R.drawable.btn_play);
+                    btnPlay.setImageResource(R.drawable.pause);
                 } else {
                     int mpAt = mp.getCurrentPosition();
                     if (mpAt == 0){
@@ -158,10 +158,10 @@ public class FirstTab extends Fragment implements MediaPlayer.OnCompletionListen
 
             @Override
             public void onClick(View arg0) {
-                if(currentSongIndex > 0){
+                if (currentSongIndex > 0) {
                     playSong(currentSongIndex - 1);
                     currentSongIndex = currentSongIndex - 1;
-                }else{
+                } else {
                     // play last song
                     playSong(songsList.size() - 1);
                     currentSongIndex = songsList.size() - 1;
@@ -191,7 +191,7 @@ public class FirstTab extends Fragment implements MediaPlayer.OnCompletionListen
             @Override
             public void onClick(View arg0) {
                 mp.stop();
-                btnPlay.setImageResource(R.drawable.btn_play);
+                btnPlay.setImageResource(R.drawable.play);
             }
         });
 
@@ -237,7 +237,7 @@ public class FirstTab extends Fragment implements MediaPlayer.OnCompletionListen
     public void onActivityResult(int requestCode,
                                  int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        rand = new Random();
+        Random rand = new Random();
         if(resultCode == 100){
             currentSongIndex = rand.nextInt();
             // play selected song
@@ -259,7 +259,7 @@ public class FirstTab extends Fragment implements MediaPlayer.OnCompletionListen
             songTitleLabel.setText(songTitle);
 
             // Changing Button Image to pause image
-            btnPlay.setImageResource(R.drawable.btn_pause);
+            btnPlay.setImageResource(R.drawable.pause);
 
             // Updating progress bar
             updateProgressBar();

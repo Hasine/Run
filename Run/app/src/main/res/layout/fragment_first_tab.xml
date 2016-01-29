@@ -5,13 +5,15 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
+    android:background="@drawable/first_bg"
+    android:scrollbarAlwaysDrawVerticalTrack="true"
     tools:context=".Fragments.FirstTab">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/currRunDistTextView"
-        android:textColor="#F00"
+        android:textColor="#000"
         android:textSize="30sp"/>
     <TextView
         android:id="@+id/currDist"
@@ -24,7 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/goalTextView"
-        android:textColor="#F00"
+        android:textColor="#000"
         android:textSize="30sp"/>
     <TextView
         android:id="@+id/goal"
@@ -38,13 +40,15 @@
         android:id="@+id/songTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="left"
-        android:layout_alignParentTop="true"
-        android:textColor="#04cbde"
+        android:layout_gravity="start"
+        android:textColor="#0466ff"
         android:textSize="16sp"
         android:paddingLeft="10dp"
+        android:paddingStart="10dp"
+        android:paddingRight="0dp"
+        android:paddingEnd="0dp"
         android:textStyle="bold"
-        android:text="SongTitle"
+        android:text="@string/songTitleText"
         android:layout_marginTop="10dp"/>
 
     <RelativeLayout
@@ -54,21 +58,29 @@
             android:id="@+id/songCurrentDurationLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:paddingLeft="10dp"
-            android:text="0:00"
+            android:paddingStart="10dp"
+            android:paddingEnd="0dp"
+            android:paddingRight="0dp"
+            android:text="@string/currDurText"
             android:textSize="16sp"
-            android:textColor="#04cbde"
+            android:textColor="#0466ff"
             android:textStyle="bold"/>
         <TextView
             android:id="@+id/songTotalDurationLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
+            android:paddingLeft="0dp"
+            android:paddingStart="0dp"
+            android:paddingEnd="10dp"
             android:paddingRight="10dp"
-            android:text="total"
+            android:text="@string/totalDurText"
             android:textSize="16sp"
             android:textColor="#04cbde"
             android:textStyle="bold"/>
@@ -80,9 +92,9 @@
         android:id="@+id/mediaplayerbuttons"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp">
+        android:paddingBottom="20dp">
         <ImageButton
+            android:contentDescription="@string/btnShuffle"
             android:id="@+id/btnShuffle"
             android:src="@drawable/shuffle"
             android:layout_width="40dp"
@@ -90,28 +102,31 @@
             android:scaleType="centerCrop"
             android:background="@null"/>
         <ImageButton
+            android:contentDescription="@string/btnBack"
             android:id="@+id/btnBack"
-            android:src="@drawable/btn_back"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:src="@drawable/back"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:scaleType="centerCrop"
             android:background="@null"/>
         <ImageButton
+            android:contentDescription="@string/btnPlay"
             android:id="@+id/btnPlay"
-            android:src="@drawable/btn_play"
-            android:layout_width="130dp"
-            android:layout_height="130dp"
+            android:src="@drawable/play"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
             android:scaleType="centerCrop"
             android:background="@null"/>
         <ImageButton
+            android:contentDescription="@string/btnNext"
             android:id="@+id/btnNext"
-            android:src="@drawable/btn_next"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:src="@drawable/next"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:scaleType="centerCrop"
             android:background="@null"/>
         <ImageButton
-            android:contentDescription="btnStop"
+            android:contentDescription="@string/btnStop"
             android:id="@+id/btnStop"
             android:src="@drawable/stop"
             android:layout_width="40dp"
