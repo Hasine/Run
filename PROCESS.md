@@ -40,3 +40,5 @@ intents naar andere apps op mn tel aangemaakt, aan streetview gewerkt.
 alle fragments voor de tablayout aangemaakt
 ## dag 18
 code opgeschoond, muziekpeler controls geïmplementeerd, custom buttons aangemaakt
+## dag 19
+muziekspeler gemaakt, jsonarray proberen te parsen

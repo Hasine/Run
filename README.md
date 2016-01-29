@@ -12,12 +12,20 @@ Deze app is bedoeld om een leuke ren route te bepalen en je afstand bij te houde
 
 ### Eerste schets
 ![alt tag](https://github.com/Hasine/Run/blob/master/doc/schets.jpg)
-### Eerste screenshot activities
+### Eerste screenshots activities
  <img src="https://github.com/Hasine/Run/blob/master/doc/main.png" height="600px" width="400px" />
  <img src="https://github.com/Hasine/Run/blob/master/doc/main1.png" height="600px" width="400px" /> 
  <img src="https://github.com/Hasine/Run/blob/master/doc/musicsettings.png" height="600px" width="400px" />
  <img src="https://github.com/Hasine/Run/blob/master/doc/search.png" height="600px" width="400px" />
  <img src="https://github.com/Hasine/Run/blob/master/doc/startrun.png" height="600px" width="400px" />
+ 
+### Screenshots activies
+ <img src="https://github.com/Hasine/Run/blob/master/doc/mainrun.png" height="600px" width="400px" />
+ <img src="https://github.com/Hasine/Run/blob/master/doc/helpactivity.png" height="600px" width="400px" /> 
+ <img src="https://github.com/Hasine/Run/blob/master/doc/makeactivity.png" height="600px" width="400px" />
+ <img src="https://github.com/Hasine/Run/blob/master/doc/firsttab.png" height="600px" width="400px" />
+ <img src="https://github.com/Hasine/Run/blob/master/doc/secondtab.png" height="600px" width="400px" />
+ <img src="https://github.com/Hasine/Run/blob/master/doc/thirdtab.png" height="600px" width="400px" />
 
 ### Korte uitleg
 Er zijn veel mensen die in hun vrije tijd buiten gaan hardlopen. Maar welke route moet je pakken als er niet een optimale plek is in de buurt van je huis om te rennen? Dat zal deze app voor je achterhalen! Met deze app kan je de gewenste afstand invoeren die je wilt afleggen en op basis daarvan berekent de app een optimale ren route. De aangegeven route kan worden opgeslagen zodat de gebruiker tijdens het rennen nog kan kijken welke kant hij/zij moet opgaan. Verder bestaat er een mogelijkheid om te checken wat de gelegde afstand is tot nu toe en kan er ook een leuke motivatie muziek worden afgespeeld tijdens het rennen.
