@@ -8,14 +8,18 @@ package hasine.project.mprog.run.Fragments;
  * This is the first tab where you can track your run and control the music player.
  */
 
+import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -39,13 +43,14 @@ import hasine.project.mprog.run.Tools.Utilities;
 public class FirstTab extends Fragment implements MediaPlayer.OnCompletionListener {
 
     private static String goal;
+    private double total_runned;
     private static final String ARG_SECTION_NUMBER = "section_number";
     private ImageButton btnPlay, btnShuffle;
     private boolean isShuffle = false;
     private TextView songTitleLabel, songCurrentDurationLabel, songTotalDurationLabel;
 
     ContentResolver cr;
-    private  MediaPlayer mp;
+    private MediaPlayer mp;
     // Handler to update UI timer, progress bar etc,.
     private Handler mHandler = new Handler();
     private SongsManager songManager;
@@ -54,6 +59,8 @@ public class FirstTab extends Fragment implements MediaPlayer.OnCompletionListen
     private List<SongsManager.Item> songsList = new ArrayList<>();
 
     public static final String TAG = FirstTab.class.getSimpleName();
+
+    protected LocationManager locationManager;
 
     // GPSTracker class
     GPSTracker gps;
@@ -74,6 +81,8 @@ public class FirstTab extends Fragment implements MediaPlayer.OnCompletionListen
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        gps = new GPSTracker(getContext());
 
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getContext());
         goal = SP.getString("goal", "0");
@@ -98,7 +107,16 @@ public class FirstTab extends Fragment implements MediaPlayer.OnCompletionListen
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_first_tab, container, false);
         TextView textView = (TextView) view.findViewById(R.id.currDist);
-        textView.setText(R.string.currDistTextFirst);
+
+        // check if GPS enabled
+        if (gps.canGetLocation()) {
+            textView.setText(String.valueOf(total_runned));
+
+        } else {
+            gps.showSettingsAlert();
+        }
+
+
         TextView textView2 = (TextView) view.findViewById(R.id.goal);
         textView2.setText(this.getString(R.string.goalSetText, goal));
 
@@ -119,7 +137,7 @@ public class FirstTab extends Fragment implements MediaPlayer.OnCompletionListen
                 if (mp.isPlaying()){
                     mp.pause();
                     // Changing Button Image to pause image
-                    btnPlay.setImageResource(R.drawable.pause);
+                    btnPlay.setImageResource(R.drawable.play);
                 } else {
                     int mpAt = mp.getCurrentPosition();
                     if (mpAt == 0){
@@ -195,15 +213,6 @@ public class FirstTab extends Fragment implements MediaPlayer.OnCompletionListen
             }
         });
 
-        gps = new GPSTracker(getContext());
-
-            // check if GPS enabled
-            if (gps.canGetLocation()) {
-                Location location = gps.getLocation();
-
-            } else {
-                gps.showSettingsAlert();
-            }
         return view;
     }
 

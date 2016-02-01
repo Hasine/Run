@@ -57,10 +57,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -166,7 +162,6 @@ public class MakeRunActivity extends FragmentActivity implements
             Log.i(TAG, "Location is null.");
             LocationServices.FusedLocationApi.requestLocationUpdates(client, mLocationRequest, this);
         }
-
         handleNewLocation(location);
 
     }
@@ -194,6 +189,7 @@ public class MakeRunActivity extends FragmentActivity implements
 
     @Override
     public void onLocationChanged(Location location) {
+
         handleNewLocation(location);
     }
 
@@ -403,26 +399,25 @@ public class MakeRunActivity extends FragmentActivity implements
     public void saveRoute(View view) {
         Toast.makeText(this, R.string.routeSavedToast, Toast.LENGTH_SHORT).show();
 
-        // To convert locationsdata to jsonarray
-        JSONObject locationsObj = new JSONObject();
-        JSONArray locationsArray = new JSONArray();
-
-        try {
-            for (int i = 0; i < rectOptions.getPoints().size(); i++) {
-                locationsObj.put("location", rectOptions.getPoints().get(i));
-                locationsArray.put(i, locationsObj);
-            }
-
-            locationsObj.put("locations", locationsArray);
-        } catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        String jsonStr = locationsObj.toString();
-
-        SharedPreferences.Editor SPEditor = SP.edit();
-        SPEditor.putString("locations", jsonStr);
-        SPEditor.apply();
+//        // To convert locationsdata to jsonarray
+//        JSONObject locationsObj = new JSONObject();
+//        JSONArray locationsArray = new JSONArray();
+//
+//        try {
+//            for (int i = 0; i < rectOptions.getPoints().size(); i++) {
+//                locationsObj.put("location", rectOptions.getPoints().get(i));
+//                locationsArray.put(i, locationsObj);
+//            }
+//            locationsObj.put("locations", locationsArray);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//
+//        String jsonStr = locationsObj.toString();
+//
+//        SharedPreferences.Editor SPEditor = SP.edit();
+//        SPEditor.putString("locations", jsonStr);
+//        SPEditor.apply();
 
         Intent gotoStart = new Intent(this, StartRunActivity.class);
         startActivityForResult(gotoStart, 0);

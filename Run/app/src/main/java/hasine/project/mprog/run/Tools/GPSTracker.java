@@ -14,6 +14,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -23,6 +24,10 @@ import android.os.IBinder;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
+
+import com.google.android.gms.maps.model.LatLng;
+
+import hasine.project.mprog.run.Tools.SphericalUtil;
 
 public class GPSTracker extends Service implements LocationListener {
 
@@ -37,9 +42,9 @@ public class GPSTracker extends Service implements LocationListener {
     double latitude; // latitude
     double longitude; // longitude
     // The minimum distance to change Updates in meters
-    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
+    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 1; // 1 meter
     // The minimum time between updates in milliseconds
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1; // 1 minute
+    private static final long MIN_TIME_BW_UPDATES = 1000; // 1 second
     // Declaring a Location Manager
     protected LocationManager locationManager;
 
@@ -145,8 +150,8 @@ public class GPSTracker extends Service implements LocationListener {
     /**
      * Function to get latitude
      * */
-    public double getLatitude(){
-        if(location != null){
+    public double getLatitude() {
+        if (location != null) {
             latitude = location.getLatitude();
         }
 
@@ -157,8 +162,8 @@ public class GPSTracker extends Service implements LocationListener {
     /**
      * Function to get longitude
      * */
-    public double getLongitude(){
-        if(location != null){
+    public double getLongitude() {
+        if (location != null) {
             longitude = location.getLongitude();
         }
 
@@ -178,7 +183,7 @@ public class GPSTracker extends Service implements LocationListener {
      * Function to show settings alert dialog
      * On pressing Settings button will launch Settings Options
      * */
-    public void showSettingsAlert(){
+    public void showSettingsAlert() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
 
         // Setting Dialog Title
@@ -189,7 +194,7 @@ public class GPSTracker extends Service implements LocationListener {
 
         // On pressing Settings button
         alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog,int which) {
+            public void onClick(DialogInterface dialog, int which) {
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 mContext.startActivity(intent);
             }
@@ -208,6 +213,7 @@ public class GPSTracker extends Service implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
+        getLocation();
     }
 
     @Override
@@ -226,6 +232,5 @@ public class GPSTracker extends Service implements LocationListener {
     public IBinder onBind(Intent arg0) {
         return null;
     }
-
 }
 
